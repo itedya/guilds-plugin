@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class ItedyaGuilds extends JavaPlugin {
@@ -59,7 +58,7 @@ public final class ItedyaGuilds extends JavaPlugin {
 
         this.logger.info("[ItedyaGuilds] Initializing papi expander");
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderExpansion().register();
+            new PlaceholderAPIExpansion().register();
         }
 
         this.logger.info("Enabled plugin");
