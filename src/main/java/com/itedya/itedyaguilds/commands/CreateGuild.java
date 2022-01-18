@@ -50,14 +50,11 @@ public class CreateGuild implements CommandExecutor {
 
             List<NeededItem> neededItems = NeededItemsController.getNeededItems(player);
 
-            if (neededItems.size() == 0) {
-                NeededItemsController.takeGuildNeededItems(player.getInventory());
-            } else {
+            if (neededItems.size() != 0) {
                 NeededItemsController.sendNeededItemsErrors(player, neededItems);
                 return true;
             }
 
-            
             try {
                 guild = GuildsController.createGuild(args[0], args[1]);
                 GuildsController.addPlayerToGuild(player, guild, "OWNER");
@@ -90,6 +87,8 @@ public class CreateGuild implements CommandExecutor {
                 GuildsController.delete(guild);
                 return true;
             }
+
+            NeededItemsController.takeGuildNeededItems(player.getInventory());
 
             player.sendMessage(ChatColor.GRAY + "Stworzyles gildie o nazwie "
                     + ChatColor.YELLOW + args[0] + ChatColor.GRAY +
