@@ -1,0 +1,28 @@
+name: ItedyaGuilds
+version: '${version}'
+main: com.itedya.itedyaguilds.ItedyaGuilds
+api-version: 1.18
+prefix: ItedyaGuilds
+authors: [ itedya ]
+description: Itedya's guilds plugin
+website: itedya.com
+depend: [ WorldGuard ]
+commands:
+  stworzgildie:
+    usage: /<command> <nazwa_gildii> <prefix_gildii>
+    description: Stworz gildie
+  usungildie:
+    usage: /<command>
+    description: Usun gildie
+  zaprosdogildii:
+    usage: /<command> <nazwa_gracza>
+    description: Zapros do gildii
+  akceptujzaproszenie:
+    usage: /<command>
+    description: Akceptuj zaproszenie
+  wyrzuczgildii:
+    usage: /<command>
+    description: Wyrzuc z gildii
+  wyjdzzgildii:
+    usage: /<command>
+    description: Wyjdz z gildii

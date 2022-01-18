@@ -1,0 +1,22 @@
+# needed items for guild
+# - item_id quantity
+needed_items:
+  - golden_apple 16
+  - ender_pearl 16
+  - book 64
+  - diamond_block 8
+  - brown_mushroom 16
+  - amethyst_block 32
+  - slime_ball 16
+
+messages:
+  errors:
+    golden_apple: "Potrzebujesz 16 zlotych jablek"
+    ender_pearl: "Potrzebujesz 16 perel endu"
+    book: "Potrzebujesz 64 ksiazki"
+    diamond_block: "Potrzebujesz 8 blokow diamentu"
+    brown_mushroom: "Potrzebujesz 16 grzybkow"
+    amethyst_block: "Potrzebujesz 32 blokow ametystu"
+    slime_ball: "Potrzebujesz 16 slime balli"
+
+  guild_not_created: "Gildia nie zostala utworzona - brak itemkow na gildie."
