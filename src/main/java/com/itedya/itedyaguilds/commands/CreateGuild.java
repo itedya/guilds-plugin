@@ -83,7 +83,7 @@ public class CreateGuild implements CommandExecutor {
                     return true;
                 }
             } catch (IntersectionRegionsException e) {
-                player.sendMessage(ChatColor.RED + "Jakis cuboid juz istnieje na tym terenie (cuboid jest rozmiarow 150x150)");
+                player.sendMessage(ChatColor.YELLOW + "Jakis cuboid juz istnieje na tym terenie (cuboid jest rozmiarow 150x150)");
                 GuildsController.delete(guild);
                 return true;
             }

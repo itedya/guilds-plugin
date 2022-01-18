@@ -42,13 +42,13 @@ public class KickOutOfGuild implements CommandExecutor {
 
             // Check if user is owner of the guild
             if (!GuildsController.isPlayerOwnerOfGuild(player, guild)) {
-                sender.sendMessage(ChatColor.RED + "Nie jestes wlascicielem gildii!");
+                sender.sendMessage(ChatColor.YELLOW + "Nie jestes wlascicielem gildii!");
                 return true;
             }
 
             // Check if player is trying to kick himself
             if (player.getName().equalsIgnoreCase(args[0])) {
-                sender.sendMessage(ChatColor.RED + "Nie mozesz wyrzucic sam siebie!");
+                sender.sendMessage(ChatColor.YELLOW + "Nie mozesz wyrzucic sam siebie!");
                 return true;
             }
 

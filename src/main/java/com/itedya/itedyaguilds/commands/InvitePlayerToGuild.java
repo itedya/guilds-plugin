@@ -34,7 +34,7 @@ public class InvitePlayerToGuild implements CommandExecutor {
 
             Guild guild = GuildsController.getPlayerGuild(player);
             if (guild == null) {
-                sender.sendMessage(ChatColor.RED + "Nie jestes w gildii!");
+                sender.sendMessage(ChatColor.YELLOW + "Nie jestes w gildii!");
                 return true;
             }
 
@@ -44,23 +44,23 @@ public class InvitePlayerToGuild implements CommandExecutor {
             assert member != null : "Member is null";
 
             if (!member.role.equals("OWNER")) {
-                sender.sendMessage(ChatColor.RED + "Musisz byc wlasicielem gildii zeby to zrobic!");
+                sender.sendMessage(ChatColor.YELLOW + "Musisz byc wlasicielem gildii zeby to zrobic!");
                 return true;
             }
 
             Player playerToInvite = Bukkit.getPlayer(args[0]);
             if (playerToInvite == null) {
-                sender.sendMessage(ChatColor.RED + "Gracz " + args[0] + " nie istnieje!");
+                sender.sendMessage(ChatColor.YELLOW + "Gracz " + args[0] + " nie istnieje!");
                 return true;
             }
 
             if (GuildsController.getPlayerGuild(playerToInvite) != null) {
-                sender.sendMessage(ChatColor.RED + "Gracz " + playerToInvite.getName() + " jest juz w gildii!");
+                sender.sendMessage(ChatColor.YELLOW + "Gracz " + playerToInvite.getName() + " jest juz w gildii!");
                 return true;
             }
 
             if (InvitesController.getGuildThatInvitesPlayer(playerToInvite) != null) {
-                sender.sendMessage(ChatColor.RED + "Gracz " + playerToInvite.getName() + " jest juz zaproszony do jednej gildii! Poczekaj 60s na przeterminowanie zaproszenia.");
+                sender.sendMessage(ChatColor.YELLOW + "Gracz " + playerToInvite.getName() + " jest juz zaproszony do jednej gildii! Poczekaj 60s na przeterminowanie zaproszenia.");
                 return true;
             }
 

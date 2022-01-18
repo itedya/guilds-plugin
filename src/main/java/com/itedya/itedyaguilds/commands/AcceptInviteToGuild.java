@@ -36,7 +36,7 @@ public class AcceptInviteToGuild implements CommandExecutor {
             guild = InvitesController.getGuildThatInvitesPlayer(player);
 
             if (guild == null) {
-                player.sendMessage(ChatColor.RED + "Nie masz zaproszenia do gildii");
+                player.sendMessage(ChatColor.YELLOW + "Nie masz zaproszenia do gildii");
                 return true;
             }
 

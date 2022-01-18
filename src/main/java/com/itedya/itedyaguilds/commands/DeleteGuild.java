@@ -30,7 +30,7 @@ public class DeleteGuild implements CommandExecutor {
             }
 
             if (!GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(ChatColor.RED + "Nie jestes w gildii!");
+                player.sendMessage(ChatColor.YELLOW + "Nie jestes w gildii!");
                 return true;
             }
 
@@ -41,7 +41,7 @@ public class DeleteGuild implements CommandExecutor {
             assert member != null : "Member is null";
 
             if (!member.role.equals("OWNER")) {
-                sender.sendMessage(ChatColor.RED + "Musisz byc wlasicielem gildii zeby to zrobic!");
+                sender.sendMessage(ChatColor.YELLOW + "Musisz byc wlasicielem gildii zeby to zrobic!");
                 return true;
             }
 
