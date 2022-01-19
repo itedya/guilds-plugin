@@ -46,7 +46,6 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//
         } else if (params.equals("short_name_formatted_with_space")) {
             try {
                 Guild guild = GuildsController.getPlayerGuild((Player) player);
