@@ -2,8 +2,11 @@ package com.itedya.itedyaguilds.controllers;
 
 import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.builders.GuildBuilder;
+import com.itedya.itedyaguilds.builders.GuildHomeBuilder;
 import com.itedya.itedyaguilds.models.Guild;
+import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.GuildMember;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -12,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class GuildsController {
@@ -69,14 +71,15 @@ public class GuildsController {
         return null;
     }
 
-    public static Guild createGuild(String name, String shortName) throws SQLException {
+    public static Guild createGuild(String name, String shortName, GuildHome guildHome) throws SQLException {
         UUID uuid = UUID.randomUUID();
         Statement stmt = Database.connection.createStatement();
 
-        PreparedStatement prepStmt = Database.connection.prepareStatement("INSERT INTO guilds (uuid, name, short_name) VALUES (?, ?, ?);");
+        PreparedStatement prepStmt = Database.connection.prepareStatement("INSERT INTO guilds (uuid, name, short_name, guild_home) VALUES (?, ?, ?, ?);");
         prepStmt.setString(1, uuid.toString());
         prepStmt.setString(2, name);
         prepStmt.setString(3, shortName);
+        prepStmt.setString(4, guildHome.uuid.toString());
 
         prepStmt.executeUpdate();
 
@@ -135,5 +138,30 @@ public class GuildsController {
         assert member != null : "Member cant be null";
 
         return member.role.equals("OWNER");
+    }
+
+    public static GuildHome createGuildHome(Location location) throws SQLException {
+        PreparedStatement stmt = Database.connection.prepareStatement("INSERT INTO guild_homes (uuid, x, y, z, created_at) VALUES (?, ?, ?, ?, datetime('now', 'localtime'))");
+        UUID uuid = UUID.randomUUID();
+
+        int x = (int) location.getX();
+        int y = (int) location.getY();
+        int z = (int) location.getZ();
+
+        stmt.setString(1, uuid.toString());
+        stmt.setInt(2, x);
+        stmt.setInt(3, y);
+        stmt.setInt(4, z);
+
+        stmt.executeUpdate();
+
+        stmt.close();
+
+        return new GuildHomeBuilder()
+                .setUUID(uuid)
+                .setX(x)
+                .setY(y)
+                .setX(x)
+                .build();
     }
 }
