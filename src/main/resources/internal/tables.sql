@@ -8,6 +8,14 @@ CREATE TABLE IF NOT EXISTS guilds
     created_at DATETIME default CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS guild_homes (
+    uuid        VARCHAR PRIMARY NOT NULL,
+    x           INTEGER NOT NULL,
+    y           INTEGER NOT NULL,
+    z           INTEGER NOT NULL,
+    created_at  DATE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS guild_members
 (
     player_uuid VARCHAR NOT NULL UNIQUE,

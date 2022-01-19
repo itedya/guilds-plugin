@@ -45,6 +45,14 @@ public class Database {
                         "    created_at DATETIME default CURRENT_TIMESTAMP\n" +
                         ");\n" +
                         "\n" +
+                        "CREATE TABLE IF NOT EXISTS guild_homes (\n" +
+                        "    uuid        VARCHAR PRIMARY NOT NULL,\n" +
+                        "    x           INTEGER NOT NULL,\n" +
+                        "    y           INTEGER NOT NULL,\n" +
+                        "    z           INTEGER NOT NULL,\n" +
+                        "    created_at  DATE NOT NULL\n" +
+                        ");\n" +
+                        "\n" +
                         "CREATE TABLE IF NOT EXISTS guild_members\n" +
                         "(\n" +
                         "    player_uuid VARCHAR NOT NULL UNIQUE,\n" +
