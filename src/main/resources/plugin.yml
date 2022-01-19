@@ -26,3 +26,9 @@ commands:
   wyjdzzgildii:
     usage: /<command>
     description: Wyjdz z gildii
+  ustawdomgildii:
+    usage: /<command>
+    description: Ustaw dom gildii
+  domgildii:
+    usage: /<command>
+    description: Tepnij sie do domku gildii
