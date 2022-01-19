@@ -42,11 +42,13 @@ public class Database {
                         "    uuid       VARCHAR PRIMARY KEY,\n" +
                         "    name       VARCHAR NOT NULL UNIQUE,\n" +
                         "    short_name VARCHAR NOT NULL UNIQUE,\n" +
-                        "    created_at DATETIME default CURRENT_TIMESTAMP\n" +
+                        "    guild_home VARCHAR NOT NULL UNIQUE,\n" +
+                        "    created_at DATETIME default CURRENT_TIMESTAMP,\n" +
+                        "    FOREIGN KEY (guild_home) REFERENCES guild_homes (uuid) ON DELETE CASCADE\n" +
                         ");\n" +
                         "\n" +
                         "CREATE TABLE IF NOT EXISTS guild_homes (\n" +
-                        "    uuid        VARCHAR PRIMARY NOT NULL,\n" +
+                        "    uuid        VARCHAR PRIMARY KEY,\n" +
                         "    x           INTEGER NOT NULL,\n" +
                         "    y           INTEGER NOT NULL,\n" +
                         "    z           INTEGER NOT NULL,\n" +

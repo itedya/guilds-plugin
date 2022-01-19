@@ -5,11 +5,13 @@ CREATE TABLE IF NOT EXISTS guilds
     uuid       VARCHAR PRIMARY KEY,
     name       VARCHAR NOT NULL UNIQUE,
     short_name VARCHAR NOT NULL UNIQUE,
-    created_at DATETIME default CURRENT_TIMESTAMP
+    guild_home VARCHAR NOT NULL UNIQUE,
+    created_at DATETIME default CURRENT_TIMESTAMP,
+    FOREIGN KEY (guild_home) REFERENCES guild_homes (uuid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS guild_homes (
-    uuid        VARCHAR PRIMARY NOT NULL,
+    uuid        VARCHAR PRIMARY KEY,
     x           INTEGER NOT NULL,
     y           INTEGER NOT NULL,
     z           INTEGER NOT NULL,
