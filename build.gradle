@@ -46,6 +46,10 @@ dependencies {
     compileOnly 'net.essentialsx:EssentialsX:2.19.2-SNAPSHOT'
 }
 
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
 def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
