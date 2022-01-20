@@ -11,24 +11,32 @@ commands:
   stworzgildie:
     usage: /<command> <nazwa_gildii> <prefix_gildii>
     description: Stworz gildie
+    permission: itedyaguilds.createguild
   usungildie:
     usage: /<command>
     description: Usun gildie
+    permission: itedyaguilds.removeguild
   zaprosdogildii:
     usage: /<command> <nazwa_gracza>
     description: Zapros do gildii
+    permission: itedyaguilds.invitetoguild
   akceptujzaproszenie:
     usage: /<command>
     description: Akceptuj zaproszenie
+    permission: itedyaguilds.acceptinvitetoguild
   wyrzuczgildii:
     usage: /<command>
     description: Wyrzuc z gildii
+    permission: itedyaguilds.kickoutofguild
   wyjdzzgildii:
     usage: /<command>
     description: Wyjdz z gildii
+    permission: itedyaguilds.exitfromguild
   ustawdomgildii:
     usage: /<command>
     description: Ustaw dom gildii
+    permission: itedyaguilds.setguildhome
   domgildii:
     usage: /<command>
     description: Tepnij sie do domku gildii
+    permission: itedyaguilds.teleporttoguildhome
