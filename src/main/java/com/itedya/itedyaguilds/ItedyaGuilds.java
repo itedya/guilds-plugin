@@ -53,6 +53,8 @@ public final class ItedyaGuilds extends JavaPlugin {
         KickOutOfGuild.initialize(this);
         this.logger.info("[ItedyaGuilds] Initializing /ustawdomgildii command");
         SetGuildHome.initialize(this);
+        this.logger.info("[ItedyaGuilds] Initializing /domgildii command");
+        TeleportToGuildHome.initialize(this);
 
 
         // Initializing cuboid boss bar
