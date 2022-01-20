@@ -1,6 +1,7 @@
 package com.itedya.itedyaguilds.models;
 
 import com.itedya.itedyaguilds.Database;
+import com.itedya.itedyaguilds.builders.GuildHomeBuilder;
 import com.itedya.itedyaguilds.builders.GuildMemberBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,5 +48,24 @@ public class Guild {
         }
 
         return members;
+    }
+
+    public GuildHome getHome() throws SQLException {
+        PreparedStatement stmt = Database.connection.prepareStatement("SELECT guild_homes.* FROM guilds JOIN guild_homes ON guilds.guild_home = guild_homes.uuid WHERE guilds.uuid = ?;");
+        stmt.setString(1, this.uuid.toString());
+        ResultSet rs = stmt.executeQuery();
+
+        rs.next();
+
+        GuildHome home = new GuildHomeBuilder()
+                .setUUID(rs.getString("uuid"))
+                .setX(rs.getInt("x"))
+                .setY(rs.getInt("y"))
+                .setZ(rs.getInt("z"))
+                .build();
+
+        stmt.close();
+
+        return home;
     }
 }
