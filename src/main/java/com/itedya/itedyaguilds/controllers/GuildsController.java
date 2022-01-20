@@ -164,4 +164,28 @@ public class GuildsController {
                 .setX(x)
                 .build();
     }
+
+    public static GuildHome updateGuildHome(GuildHome guildHome, Location location) throws SQLException {
+        PreparedStatement stmt = Database.connection.prepareStatement("UPDATE guild_homes SET x = ?, y = ?, z = ? WHERE uuid = ?;");
+
+        int x = (int) location.getX();
+        int y = (int) location.getY();
+        int z = (int) location.getZ();
+
+        stmt.setInt(1, x);
+        stmt.setInt(2, y);
+        stmt.setInt(3, z);
+        stmt.setString(4, guildHome.uuid.toString());
+
+        stmt.executeUpdate();
+
+        stmt.close();
+
+        return new GuildHomeBuilder()
+                .setUUID(guildHome.uuid)
+                .setX(x)
+                .setY(y)
+                .setZ(z)
+                .build();
+    }
 }
