@@ -38,8 +38,9 @@ public class GuildsController {
     public static boolean isPlayerInGuild(Player player) throws SQLException {
         String uuid = player.getUniqueId().toString();
 
-        Statement stmt = Database.connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM guild_members WHERE player_uuid = '" + uuid + "'");
+        PreparedStatement stmt = Database.connection.prepareStatement("SELECT COUNT(*) FROM guild_members WHERE player_uuid = ?;");
+        stmt.setString(1, uuid);
+        ResultSet rs = stmt.executeQuery();
 
         int count = 0;
         while (rs.next()) {
