@@ -6,8 +6,8 @@ import com.itedya.itedyaguilds.controllers.NeededItemsController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.exception.IntersectionRegionsException;
 import com.itedya.itedyaguilds.models.Guild;
+import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.NeededItem;
-import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -56,7 +56,8 @@ public class CreateGuild implements CommandExecutor {
             }
 
             try {
-                guild = GuildsController.createGuild(args[0], args[1]);
+                GuildHome guildHome = GuildsController.createGuildHome(player.getLocation());
+                guild = GuildsController.createGuild(args[0], args[1], guildHome);
                 GuildsController.addPlayerToGuild(player, guild, "OWNER");
                 WorldGuardController.createGuildRegion(player.getLocation(), guild);
                 WorldGuardController.addPlayerToGuildCuboid(player, guild);
