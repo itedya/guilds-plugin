@@ -87,6 +87,21 @@ public class WorldGuardController {
         manager.removeRegion(regionId);
     }
 
+    public static boolean isPlayerInGuildRegion(Player player, Guild guild) {
+        String match = "guild_" + guild.short_name + "_" + guild.uuid.toString();
+
+        var manager = WorldGuardController.getRegionManager();
+        var loc = player.getLocation();
+
+        for (ProtectedRegion rg : manager.getApplicableRegions(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()))) {
+            if (rg.getId().equals(match)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static ProtectedRegion getGuildRegionThatPlayerIsIn(Player player) {
         Pattern compiledPattern = Pattern.compile("guild_[a-zA-Z0-9]*_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}");
 
