@@ -6,7 +6,7 @@ prefix: ItedyaGuilds
 authors: [ itedya ]
 description: Itedya's guilds plugin
 website: itedya.com
-depend: [ WorldGuard ]
+depend: [ WorldGuard, AntiCombatLog ]
 commands:
   stworzgildie:
     usage: /<command> <nazwa_gildii> <prefix_gildii>
