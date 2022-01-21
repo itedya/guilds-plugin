@@ -23,10 +23,12 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class CreateGuild implements CommandExecutor {
-    private final Logger logger = Bukkit.getLogger();
+    private Logger logger = Bukkit.getLogger();
 
     public static void initialize(JavaPlugin plugin) {
-        Objects.requireNonNull(plugin.getCommand("stworzgildie")).setExecutor(new CreateGuild());
+        var command = new CreateGuild();
+        command.logger = plugin.getLogger();
+        Objects.requireNonNull(plugin.getCommand("stworzgildie")).setExecutor(command);
     }
 
     @Override
@@ -63,6 +65,9 @@ public class CreateGuild implements CommandExecutor {
                 WorldGuardController.addPlayerToGuildCuboid(player, guild);
 
                 Database.connection.commit();
+
+                this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                        "created guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
             } catch (SQLException e) {
                 try {
                     Database.connection.rollback();

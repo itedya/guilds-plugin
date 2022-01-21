@@ -16,10 +16,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class KickOutOfGuild implements CommandExecutor {
+    private Logger logger;
+
     public static void initialize(JavaPlugin plugin) {
-        Objects.requireNonNull(plugin.getCommand("wyrzuczgildii")).setExecutor(new KickOutOfGuild());
+        var command = new KickOutOfGuild();
+        command.logger = plugin.getLogger();
+        Objects.requireNonNull(plugin.getCommand("wyrzuczgildii")).setExecutor(command);
     }
 
     @Override
@@ -64,6 +69,10 @@ public class KickOutOfGuild implements CommandExecutor {
             }
 
             player.sendMessage(ChatColor.YELLOW + "Wyrzuciles uzytkownika " + playerToKick.getName());
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "kicked out user " + playerToKick.getName() + " " + playerToKick.getUniqueId().toString() + " " +
+                    "from guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
 
             return true;
         } catch (Exception e) {

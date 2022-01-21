@@ -13,8 +13,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class AcceptInviteToGuild implements CommandExecutor {
+    private Logger logger;
+
     public static void initialize(JavaPlugin plugin) {
         Objects.requireNonNull(plugin.getCommand("akceptujzaproszenie")).setExecutor(new AcceptInviteToGuild());
     }
@@ -44,6 +47,9 @@ public class AcceptInviteToGuild implements CommandExecutor {
             WorldGuardController.addPlayerToGuildCuboid(player, guild);
             player.sendMessage(ChatColor.GREEN + "Witamy w gildii " + ChatColor.GRAY + "[" +
                     ChatColor.YELLOW + guild.short_name + ChatColor.GRAY + "] " + ChatColor.YELLOW + guild.name + ChatColor.GRAY + "!");
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "accepted invite to guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
 
         } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "Wystapil blad po stronie serwera, skontaktuj sie z administratorem!");

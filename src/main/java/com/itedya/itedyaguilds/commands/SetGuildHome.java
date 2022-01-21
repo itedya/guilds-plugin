@@ -60,6 +60,11 @@ public class SetGuildHome implements CommandExecutor {
                     .append(ChatColor.YELLOW + "Y" + ChatColor.GRAY + ": " + gh.y + " ")
                     .append(ChatColor.YELLOW + "Z" + ChatColor.GRAY + ": " + gh.z)
                     .toString());
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "set up a home guild at coords " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " +
+                    "for guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
+
             return true;
         } catch (Exception e) {
             try {

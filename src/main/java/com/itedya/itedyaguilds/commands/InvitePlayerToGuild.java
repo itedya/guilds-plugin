@@ -12,12 +12,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class InvitePlayerToGuild implements CommandExecutor {
+    private Logger logger;
+
     public static void initialize(JavaPlugin plugin) {
-        Objects.requireNonNull(plugin.getCommand("zaprosdogildii")).setExecutor(new InvitePlayerToGuild());
+        var command = new InvitePlayerToGuild();
+        command.logger = plugin.getLogger();
+        Objects.requireNonNull(plugin.getCommand("zaprosdogildii")).setExecutor(command);
     }
 
     @Override
@@ -71,6 +77,10 @@ public class InvitePlayerToGuild implements CommandExecutor {
                     "Aby zaakceptowac zaproszenie, wpisz /akceptujzaproszenie");
 
             player.sendMessage(ChatColor.GREEN + "Wyslano zaproszenie!");
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "invited user " + playerToInvite.getName() + " " + playerToInvite.getUniqueId().toString() + " " +
+                    "to guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
 
             return true;
         } catch (Exception e) {

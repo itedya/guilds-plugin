@@ -15,10 +15,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class DeleteGuild implements CommandExecutor {
+    private Logger logger;
+
     public static void initialize(JavaPlugin plugin) {
-        Objects.requireNonNull(plugin.getCommand("usungildie")).setExecutor(new DeleteGuild());
+        var command = new DeleteGuild();
+        command.logger = plugin.getLogger();
+        Objects.requireNonNull(plugin.getCommand("usungildie")).setExecutor(command);
     }
 
     @Override
@@ -54,6 +59,10 @@ public class DeleteGuild implements CommandExecutor {
             }
 
             sender.sendMessage(ChatColor.GRAY + "Usunales gildie " + ChatColor.YELLOW + guild.name + ChatColor.GRAY + "!");
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "deleted guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
+
             return true;
         } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "Wystapil blad po stronie serwera, skontaktuj sie z administartorem.");

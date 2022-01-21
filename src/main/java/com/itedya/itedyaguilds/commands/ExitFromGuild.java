@@ -21,7 +21,9 @@ public class ExitFromGuild implements CommandExecutor {
     private Logger logger = Bukkit.getLogger();
 
     public static void initialize(JavaPlugin plugin) {
-        Objects.requireNonNull(plugin.getCommand("wyjdzzgildii")).setExecutor(new ExitFromGuild());
+        var command = new ExitFromGuild();
+        command.logger = plugin.getLogger();
+        Objects.requireNonNull(plugin.getCommand("wyjdzzgildii")).setExecutor(command);
     }
 
     @Override
@@ -49,6 +51,9 @@ public class ExitFromGuild implements CommandExecutor {
             GuildsController.removeMember(player);
             Database.connection.commit();
             WorldGuardController.removePlayerFromGuildCuboid(player, guild);
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "left guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
 
             sender.sendMessage(ChatColor.GREEN + "Wyszedles z gildii " + guild.name);
         } catch (Exception e) {

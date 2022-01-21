@@ -58,6 +58,8 @@ public class TeleportToGuildHome implements CommandExecutor {
             var loc = player.getLocation();
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
+                private Logger logger = plugin.getLogger();
+
                 @Override
                 public void run() {
                     var locNow = player.getLocation();
@@ -68,9 +70,18 @@ public class TeleportToGuildHome implements CommandExecutor {
                         player.sendMessage(ChatColor.YELLOW + "Ruszyles sie! Teleportacja anulowana!");
                     } else {
                         player.teleport(new Location(Bukkit.getWorld("world"), gh.x, gh.y, gh.z));
+
+                        this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                                "teleported to guild home at coords " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " +
+                                "of guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
                     }
                 }
             }, 20 * 5);
+
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                    "requested a teleport to guild home at coords " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " +
+                    "of guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
+
         } catch (Exception e) {
             try {
                 Database.connection.rollback();
