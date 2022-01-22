@@ -1,41 +1,38 @@
 package com.itedya.itedyaguilds.commands;
 
 import com.itedya.itedyaguilds.Database;
+import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildMember;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.logging.Logger;
 
-public class DeleteGuild implements CommandExecutor {
+public class DeleteGuild {
     private Logger logger;
 
-    public static void initialize(JavaPlugin plugin) {
+    public static DeleteGuild initialize(JavaPlugin plugin) {
         var command = new DeleteGuild();
         command.logger = plugin.getLogger();
-        Objects.requireNonNull(plugin.getCommand("usungildie")).setExecutor(command);
+        return command;
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("You have to be in game to execute this command!");
+            if (!player.hasPermission("itedya-guilds.delete")) {
+                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
                 return true;
             }
 
             if (!GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(ChatColor.YELLOW + "Nie jestes w gildii!");
+                player.sendMessage(ConfigController.getYouAreNotInGuildMessage());
                 return true;
             }
 
@@ -46,7 +43,7 @@ public class DeleteGuild implements CommandExecutor {
             assert member != null : "Member is null";
 
             if (!member.role.equals("OWNER")) {
-                sender.sendMessage(ChatColor.YELLOW + "Musisz byc wlasicielem gildii zeby to zrobic!");
+                player.sendMessage(ConfigController.getYouHaveToBeOwnerOfGuildMessage());
                 return true;
             }
 
@@ -58,14 +55,14 @@ public class DeleteGuild implements CommandExecutor {
                 Database.connection.rollback();
             }
 
-            sender.sendMessage(ChatColor.GRAY + "Usunales gildie " + ChatColor.YELLOW + guild.name + ChatColor.GRAY + "!");
+            player.sendMessage(ConfigController.getDeletedGuildMessage(guild.name));
 
             this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
                     "deleted guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
 
             return true;
         } catch (Exception e) {
-            sender.sendMessage(ChatColor.RED + "Wystapil blad po stronie serwera, skontaktuj sie z administartorem.");
+            player.sendMessage(ConfigController.getServerErrorMessage());
             e.printStackTrace();
             return true;
         }

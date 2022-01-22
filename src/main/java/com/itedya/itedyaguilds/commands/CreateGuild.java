@@ -1,6 +1,7 @@
 package com.itedya.itedyaguilds.commands;
 
 import com.itedya.itedyaguilds.Database;
+import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
 import com.itedya.itedyaguilds.controllers.NeededItemsController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
@@ -19,32 +20,32 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
-public class CreateGuild implements CommandExecutor {
+public class CreateGuild {
     private Logger logger = Bukkit.getLogger();
 
-    public static void initialize(JavaPlugin plugin) {
+    public static CreateGuild initialize(JavaPlugin plugin) {
         var command = new CreateGuild();
         command.logger = plugin.getLogger();
-        Objects.requireNonNull(plugin.getCommand("stworzgildie")).setExecutor(command);
+        return command;
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
-            if (args.length != 2) {
-                return false;
+            if (!player.hasPermission("itedya-guilds.create")) {
+                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                return true;
             }
 
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("You have to be a player to execute this command!");
+            if (args.length != 2) {
+                player.sendMessage(ConfigController.getInvalidUsageMessage());
+                player.sendMessage(ConfigController.help.toString());
                 return true;
             }
 
             if (GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(ChatColor.YELLOW + "Jestes juz w gildii! Nie mozesz zalozyc kolejnej!");
+                player.sendMessage(ConfigController.getYouAreAlreadyInGuildMessage());
                 return true;
             }
 
@@ -79,17 +80,19 @@ public class CreateGuild implements CommandExecutor {
 
                 if (message.contains("UNIQUE constraint failed")) {
                     if (message.contains("name")) {
-                        sender.sendMessage(ChatColor.RED + "Gildia o takiej nazwie juz istnieje! Wybierz inny.");
+                        player.sendMessage(ConfigController.getGuildNameIsNotUniqueMessage());
                     } else if (message.contains("short_name")) {
-                        sender.sendMessage(ChatColor.RED + "Gildia z takim skrotem juz istnieje! Wybierz inna.");
+                        player.sendMessage(ConfigController.getGuildShortNameIsNotUniqueMessage());
                     } else {
                         throw e;
                     }
 
                     return true;
+                } else {
+                    throw e;
                 }
             } catch (IntersectionRegionsException e) {
-                player.sendMessage(ChatColor.YELLOW + "Jakis cuboid juz istnieje na tym terenie (cuboid jest rozmiarow 150x150)");
+                player.sendMessage(ConfigController.getCuboidIntersectionMessage());
                 GuildsController.delete(guild);
                 return true;
             }
@@ -102,12 +105,12 @@ public class CreateGuild implements CommandExecutor {
 
             return true;
         } catch (Exception e) {
-            sender.sendMessage(ChatColor.RED + "Wystapil blad po stronie serwera, skontaktuj sie z administratorem!");
+            player.sendMessage(ConfigController.getServerErrorMessage());
 
             this.logger.severe("[ItedyaGuilds] SQLException! " + e.getMessage());
             e.printStackTrace();
+            return true;
         }
 
-        return false;
     }
 }

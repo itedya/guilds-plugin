@@ -1,0 +1,10 @@
+&7------------ &6ItedyaGuilds &7------------
+&b/g stworz <nazwa_gildii> <skrot_gildii> &7- Stworz gildie
+&b/g usun &7- Usun gildie
+&b/g akceptuj &7- Akceptuj zaproszenie do gildii
+&b/g wyjdz &7- Wyjdz z gildii
+&b/g zapros <nazwa_uzytkownika> &7- Zapros uzytkownika do gildii
+&b/g wyrzuc <nazwa_uzytkownika> &7- Wyrzuc uzytkownika z gildii
+&b/g ustawdom &7- Ustaw dom gildii w aktualnej lokalizacji
+&b/g dom &7- Teleportuj do domu gildii
+&7------------ &6ItedyaGuilds &7------------

@@ -2,6 +2,7 @@ package com.itedya.itedyaguilds.commands;
 
 import com.earth2me.essentials.OfflinePlayer;
 import com.itedya.itedyaguilds.Database;
+import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
@@ -15,24 +16,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.logging.Logger;
 
-public class KickOutOfGuild implements CommandExecutor {
+public class KickOutOfGuild {
     private Logger logger;
 
-    public static void initialize(JavaPlugin plugin) {
+    public static KickOutOfGuild initialize(JavaPlugin plugin) {
         var command = new KickOutOfGuild();
         command.logger = plugin.getLogger();
-        Objects.requireNonNull(plugin.getCommand("wyrzuczgildii")).setExecutor(command);
+        return command;
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
-            // Check if sender is player, not a console
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("You have to be in game!");
+            if (!player.hasPermission("itedya-guilds.kick-out")) {
+                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
                 return true;
             }
 
@@ -47,13 +45,13 @@ public class KickOutOfGuild implements CommandExecutor {
 
             // Check if user is owner of the guild
             if (!GuildsController.isPlayerOwnerOfGuild(player, guild)) {
-                sender.sendMessage(ChatColor.YELLOW + "Nie jestes wlascicielem gildii!");
+                player.sendMessage(ConfigController.getYouHaveToBeOwnerOfGuildMessage());
                 return true;
             }
 
             // Check if player is trying to kick himself
             if (player.getName().equalsIgnoreCase(args[0])) {
-                sender.sendMessage(ChatColor.YELLOW + "Nie mozesz wyrzucic sam siebie!");
+                player.sendMessage(ConfigController.getYouCantKickYourselfMessage());
                 return true;
             }
 
@@ -65,10 +63,10 @@ public class KickOutOfGuild implements CommandExecutor {
             Database.connection.commit();
 
             if (playerToKick.isOnline()) {
-                playerToKick.sendMessage(ChatColor.YELLOW + "Zostales wyrzucony z gildii " + guild.name + "!");
+                playerToKick.sendMessage(ConfigController.getYouHaveBeenKickedOutOfGuildMessage(guild.name));
             }
 
-            player.sendMessage(ChatColor.YELLOW + "Wyrzuciles uzytkownika " + playerToKick.getName());
+            player.sendMessage(ConfigController.getYouKickedOutAUser(playerToKick.getName()));
 
             this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
                     "kicked out user " + playerToKick.getName() + " " + playerToKick.getUniqueId().toString() + " " +
@@ -81,7 +79,7 @@ public class KickOutOfGuild implements CommandExecutor {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            sender.sendMessage(ChatColor.RED + "Wystapil blad po stronie serwera, skontaktuj sie z administartorem.");
+            player.sendMessage(ConfigController.getServerErrorMessage());
             e.printStackTrace();
             return true;
         }

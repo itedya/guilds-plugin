@@ -5,10 +5,15 @@ import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.InvitesController;
 import com.itedya.itedyaguilds.listeners.DisplayCuboidInfoListener;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public final class ItedyaGuilds extends JavaPlugin {
@@ -31,7 +36,11 @@ public final class ItedyaGuilds extends JavaPlugin {
         }
 
         InvitesController.initialize(this);
-        ConfigController.initialize(this);
+        try {
+            ConfigController.initialize(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Initialize commands
         AcceptInviteToGuild.initialize(this);
@@ -57,5 +66,37 @@ public final class ItedyaGuilds extends JavaPlugin {
     @Override
     public void onDisable() {
         this.logger.info("Disabled plugin");
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("You have to be a player to execute this command!");
+            return true;
+        }
+
+        if (args.length == 0) {
+            player.sendMessage(ConfigController.getInvalidCommandMessage());
+            return true;
+        }
+
+        String commandName = args[0];
+        args = Arrays.copyOfRange(args, 1, args.length);
+
+        return switch (commandName) {
+            case "akceptuj" -> AcceptInviteToGuild.initialize(this).onCommand(player, command, label, args);
+            case "stworz" -> CreateGuild.initialize(this).onCommand(player, command, label, args);
+            case "usun" -> DeleteGuild.initialize(this).onCommand(player, command, label, args);
+            case "wyjdz" -> ExitFromGuild.initialize(this).onCommand(player, command, label, args);
+            case "zapros" -> InvitePlayerToGuild.initialize(this).onCommand(player, command, label, args);
+            case "wyrzuc" -> KickOutOfGuild.initialize(this).onCommand(player, command, label, args);
+            case "ustawdom" -> SetGuildHome.initialize(this).onCommand(player, command, label, args);
+            case "dom" -> TeleportToGuildHome.initialize(this).onCommand(player, command, label, args);
+            default -> {
+                for (String line : ConfigController.help) player.sendMessage(line);
+
+                yield true;
+            }
+        };
     }
 }
