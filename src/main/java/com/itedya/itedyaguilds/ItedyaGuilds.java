@@ -77,6 +77,8 @@ public final class ItedyaGuilds extends JavaPlugin {
 
         if (args.length == 0) {
             player.sendMessage(ConfigController.getInvalidCommandMessage());
+            for (String line : ConfigController.help) player.sendMessage(line);
+
             return true;
         }
 

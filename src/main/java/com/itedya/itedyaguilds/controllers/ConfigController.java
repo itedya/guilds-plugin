@@ -75,8 +75,8 @@ public class ConfigController {
         }).collect(Collectors.toList());
     }
 
-    public static String getGuildNotCreatedMessage() {
-        return ConfigController.config.getString("messages.guild_not_created");
+    public static String getNotEnoughItemsForGuild() {
+        return ConfigController.config.getString("messages.not_enough_items_for_guild");
     }
 
     public static String getNeededItemError(String name) {
@@ -86,87 +86,86 @@ public class ConfigController {
     }
 
     public static String getInvalidCommandMessage() {
-        return ConfigController.config.getString("messages.invalid_command", ChatColor.RED + "Niepoprawna komenda!");
+        return ConfigController.config.getString("messages.invalid_command", ChatColor.translateAlternateColorCodes('&', "&cNiepoprawna komenda"));
     }
 
     public static String getNotEnoughPermissionsMessage() {
-        return ConfigController.config.getString("messages.not_enough_permissions", ChatColor.RED + "Brak permisji!");
+        return ConfigController.config.getString("messages.not_enough_permissions", ChatColor.translateAlternateColorCodes('&', "&cBrak permisji!"));
     }
 
     public static String getServerErrorMessage() {
-        return ConfigController.config.getString("messages.server_error", ChatColor.RED + "Wystapil blad serwera! Skontaktuj sie z itedya, yuuki lub maksio lub sprobuj ponownie.");
+        return ConfigController.config.getString("messages.server_error", ChatColor.translateAlternateColorCodes('&', "&cWystapil blad serwera! Skontaktuj sie z itedya, yuuki lub maksio lub sprobuj ponownie."));
     }
 
     public static String getInvalidUsageMessage() {
-        return ConfigController.config.getString("messages.invalid_usage", ChatColor.RED + "Zle uzycie komendy, zobacz pomoc.");
+        return ConfigController.config.getString("messages.invalid_usage", ChatColor.translateAlternateColorCodes('&', "&cZle uzycie komendy, zobacz pomoc."));
     }
 
     public static String getYouAreAlreadyInGuildMessage() {
-        return ConfigController.config.getString("messages.you_are_already_in_guild", ChatColor.YELLOW + "Jestes juz w gildii!");
+        return ConfigController.config.getString("messages.you_are_already_in_guild", ChatColor.translateAlternateColorCodes('&', "&eJestes juz w gildii!"));
     }
 
     public static String getGuildNameIsNotUniqueMessage() {
-        return ConfigController.config.getString("messages.guild_name_is_not_unique", ChatColor.YELLOW + "Gildia o takiej nazwie juz istnieje! Wybierz inna.");
+        return ConfigController.config.getString("messages.guild_name_is_not_unique", ChatColor.translateAlternateColorCodes('&', "&eGildia o takiej nazwie juz istnieje! Wybierz inna."));
     }
 
     public static String getGuildShortNameIsNotUniqueMessage() {
-        return ConfigController.config.getString("messages.guild_short_name_is_not_unique", ChatColor.YELLOW + "Gildia z takim skrotem juz istnieje! Wybierz inna.");
+        return ConfigController.config.getString("messages.guild_short_name_is_not_unique", ChatColor.translateAlternateColorCodes('&', "&eGildia z takim skrotem juz istnieje! Wybierz inny."));
     }
 
     public static String getCuboidIntersectionMessage() {
-        return ConfigController.config.getString("messages.cuboid_intersection", ChatColor.YELLOW + "Jakis cuboid juz istnieje na tym terenie (cuboid jest rozmiarow 150x150)");
+        return ConfigController.config.getString("messages.cuboid_intersection", ChatColor.translateAlternateColorCodes('&', "&eJakis cuboid juz istnieje na tym terenie (cuboid jest rozmiarow 150x150)!"));
     }
 
     public static String getYouDontHaveInviteToGuild() {
-        return ConfigController.config.getString("messages.you_dont_have_invite_to_guild", ChatColor.YELLOW + "Nie masz zaproszenia do gildii!");
+        return ConfigController.config.getString("messages.you_dont_have_invite_to_guild", ChatColor.translateAlternateColorCodes('&', "&eNie masz zaproszenia do gildii!"));
     }
 
     public static String getWelcomeToGuildMessage(String name, String shortName) {
-        return ConfigController.config.getString("messages.you_dont_have_invite_to_guild", ChatColor.GREEN + "Witamy w gildii " + ChatColor.GRAY + "[" +
-                        ChatColor.YELLOW + shortName + ChatColor.GRAY + "] " + ChatColor.YELLOW + name + ChatColor.GREEN + "!")
-                .replaceAll("%name%", name)
-                .replaceAll("%short_name%", shortName);
+        return ConfigController.config.getString("messages.you_dont_have_invite_to_guild", ChatColor.translateAlternateColorCodes('&', "&aWitamy w gildii &7[&e{GUILD_SHORT_NAME}&7] &e{GUILD_NAME}&a!"))
+                .replaceAll("\\{GUILD_NAME\\}", name)
+                .replaceAll("\\{GUILD_SHORT_NAME\\}", shortName);
     }
 
     public static String getYouAreNotInGuildMessage() {
-        return ConfigController.config.getString("messages.you_are_not_in_guild", ChatColor.YELLOW + "Nie jestes w gildii!");
+        return ConfigController.config.getString("messages.you_are_not_in_guild", ChatColor.translateAlternateColorCodes('&', "&eNie jestes w gildii!"));
     }
 
     public static String getYouHaveToBeOwnerOfGuildMessage() {
-        return ConfigController.config.getString("messages.you_have_to_be_owner_of_guild", ChatColor.YELLOW + "Musisz byc wlasicielem gildii zeby to zrobic!");
+        return ConfigController.config.getString("messages.you_have_to_be_owner_of_guild", ChatColor.translateAlternateColorCodes('&', "&eMusisz byc wlasicielem gildii zeby to zrobic!"));
     }
 
     public static String getDeletedGuildMessage(String name) {
-        return ConfigController.config.getString("messages.deleted_guild", ChatColor.GRAY + "Usunales gildie " + ChatColor.YELLOW + name + ChatColor.GRAY + "!")
-                .replaceAll("%name%", name);
+        return ConfigController.config.getString("messages.deleted_guild",  ChatColor.translateAlternateColorCodes('&', "&7Usunales gildie &e{GUILD_NAME}&7!"))
+                .replaceAll("\\{GUILD_NAME\\}", name);
     }
 
     public static String getOwnerCanOnlyDeleteGuildMessage() {
-        return ConfigController.config.getString("messages.owner_can_only_delete_guild", ChatColor.YELLOW + "Jestes wlascicielem gildii! Mozesz co najwyzej ja usunac.");
+        return ConfigController.config.getString("messages.owner_can_only_delete_guild", ChatColor.translateAlternateColorCodes('&', "&aJestes wlascicielem gildii! Mozesz co najwyzej ja usunac."));
     }
 
     public static String getExitFromGuildMessge(String name) {
-        return ConfigController.config.getString("messages.exit_from_guild", ChatColor.GRAY + "Wyszedles z gildii " + ChatColor.YELLOW + "%name%" + ChatColor.GRAY + "!")
-                .replaceAll("%name%", name);
+        return ConfigController.config.getString("messages.exit_from_guild", ChatColor.translateAlternateColorCodes('&', "&7Wyszedles z gildii &a{GUILD_NAME}&7!"))
+                .replaceAll("\\{GUILD_NAME\\}", name);
     }
 
     public static String getPlayerDoesntExist(String name) {
-        return ConfigController.config.getString("messages.player_doesnt_exist", ChatColor.YELLOW + "Gracz %name% nie istnieje!")
-                .replaceAll("%name%", name);
+        return ConfigController.config.getString("messages.player_doesnt_exist", ChatColor.translateAlternateColorCodes('&', "&eGracz {PLAYER_NAME} nie istnieje!"))
+                .replaceAll("\\{PLAYER_NAME\\}", name);
     }
 
     public static String getPlayerIsAlreadyInGuild(String name) {
-        return ConfigController.config.getString("messages.player_is_already_in_guild", ChatColor.YELLOW + "Gracz %name% jest juz w gildii!")
-                .replaceAll("%name%", name);
+        return ConfigController.config.getString("messages.player_is_already_in_guild", ChatColor.translateAlternateColorCodes('&', "&eGracz {PLAYER_NAME} jest juz w gildii!"))
+                .replaceAll("\\{PLAYER_NAME\\}", name);
     }
 
     public static String getYouGotInviteMessage(String playerName, String guildName, String guildShortName) {
         return ConfigController.config.getString("messages.you_got_invite_message",
                         ChatColor.translateAlternateColorCodes('&', "&aDostales zaproszenie do gildii " +
-                                "&7[&e%guild_short_name%&7] &e%guild_name% &aod gracza %player_name%. Aby zaakceptowac zaproszenie, wpisz /g akceptuj"))
-                .replaceAll("%guild_short_name%", guildShortName)
-                .replaceAll("%guild_name%", guildName)
-                .replaceAll("%player_name%", playerName);
+                                "&7[&e{GUILD_SHORT_NAME}&7] &e%guild_name% &aod gracza {PLAYER_NAME}. Aby zaakceptowac zaproszenie, wpisz /g akceptuj"))
+                .replaceAll("\\{GUILD_SHORT_NAME\\}", guildShortName)
+                .replaceAll("\\{GUILD_NAME\\}", guildName)
+                .replaceAll("\\{PLAYER_NAME\\}", playerName);
     }
 
     public static String getSentInviteMessage() {
@@ -181,14 +180,14 @@ public class ConfigController {
 
     public static String getYouHaveBeenKickedOutOfGuildMessage(String guildName) {
         return ConfigController.config.getString("messages.you_have_been_kicked_out_of_guild",
-                        ChatColor.translateAlternateColorCodes('&', "&eZostales wyrzucony z gildii %name%!"))
-                .replaceAll("%name%", guildName);
+                        ChatColor.translateAlternateColorCodes('&', "&eZostales wyrzucony z gildii {GUILD_NAME}!"))
+                .replaceAll("\\{GUILD_NAME\\}", guildName);
     }
 
     public static String getYouKickedOutAUser(String playerName) {
         return ConfigController.config.getString("messages.you_kicked_out_a_user",
-                        ChatColor.translateAlternateColorCodes('&', "&aWyrzuciles uzytkownika %player_name%!"))
-                .replaceAll("%player_name%", playerName);
+                        ChatColor.translateAlternateColorCodes('&', "&aWyrzuciles uzytkownika {PLAYER_NAME}!"))
+                .replaceAll("\\{PLAYER_NAME\\}", playerName);
     }
 
     public static String getLocationIsNotInCuboid() {
@@ -203,8 +202,8 @@ public class ConfigController {
 
     public static String getTeleportationIn(Integer seconds) {
         return ConfigController.config.getString("messages.teleportation_in",
-                ChatColor.translateAlternateColorCodes('&', "&6Teleportacja za %seconds% sekund..."))
-                .replaceAll("%seconds%", seconds.toString());
+                        ChatColor.translateAlternateColorCodes('&', "&6Teleportacja za {SECONDS} sekund..."))
+                .replaceAll("\\{SECONDS\\}", seconds.toString());
     }
 
     public static String getMovedWhileTeleporting() {
