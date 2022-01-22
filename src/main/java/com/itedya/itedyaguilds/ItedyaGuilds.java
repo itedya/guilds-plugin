@@ -94,6 +94,7 @@ public final class ItedyaGuilds extends JavaPlugin {
             case "wyrzuc" -> KickOutOfGuild.initialize(this).onCommand(player, command, label, args);
             case "ustawdom" -> SetGuildHome.initialize(this).onCommand(player, command, label, args);
             case "dom" -> TeleportToGuildHome.initialize(this).onCommand(player, command, label, args);
+            case "info" -> GuildInfo.intialize(this).onCommand(player, command, label, args);
             default -> {
                 for (String line : ConfigController.help) player.sendMessage(line);
 

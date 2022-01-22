@@ -35,6 +35,23 @@ public class GuildsController {
         return null;
     }
 
+    public static Guild getGuildByShortName(String shortName) throws SQLException, ParseException {
+        PreparedStatement stmt = Database.connection.prepareStatement("SELECT * FROM guilds WHERE short_name = ?;");
+        stmt.setString(1, shortName);
+
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return new GuildBuilder()
+                    .setUUID(rs.getString("uuid"))
+                    .setName(rs.getString("name"))
+                    .setShortName(rs.getString("short_name"))
+                    .setCreatedAt(rs.getString("created_at"))
+                    .build();
+        }
+
+        return null;
+    }
+
     public static boolean isPlayerInGuild(Player player) throws SQLException {
         String uuid = player.getUniqueId().toString();
 

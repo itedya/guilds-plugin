@@ -23,7 +23,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.3-dev.1";
+        return "1.3";
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
         if (params.equals("short_name_formatted")) {
             try {
-                Guild guild = GuildsController.getPlayerGuild((Player) player);
+                Guild guild = GuildsController.getPlayerGuild(player);
                 if (guild == null) return "";
 
                 return ChatColor.GRAY + "[" + ChatColor.YELLOW + guild.short_name + ChatColor.GRAY + "]";
@@ -48,7 +48,7 @@ public class PlaceholderAPIExpansion extends PlaceholderExpansion {
             }
         } else if (params.equals("short_name_formatted_with_space")) {
             try {
-                Guild guild = GuildsController.getPlayerGuild((Player) player);
+                Guild guild = GuildsController.getPlayerGuild(player);
                 if (guild == null) return "";
 
                 return ChatColor.GRAY + "[" + ChatColor.YELLOW + guild.short_name + ChatColor.GRAY + "] ";

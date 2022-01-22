@@ -123,8 +123,8 @@ public class ConfigController {
 
     public static String getWelcomeToGuildMessage(String name, String shortName) {
         return ConfigController.config.getString("messages.you_dont_have_invite_to_guild", ChatColor.translateAlternateColorCodes('&', "&aWitamy w gildii &7[&e{GUILD_SHORT_NAME}&7] &e{GUILD_NAME}&a!"))
-                .replaceAll("\\{GUILD_NAME\\}", name)
-                .replaceAll("\\{GUILD_SHORT_NAME\\}", shortName);
+                .replaceAll("\\{GUILD_NAME}", name)
+                .replaceAll("\\{GUILD_SHORT_NAME}", shortName);
     }
 
     public static String getYouAreNotInGuildMessage() {
@@ -137,7 +137,7 @@ public class ConfigController {
 
     public static String getDeletedGuildMessage(String name) {
         return ConfigController.config.getString("messages.deleted_guild",  ChatColor.translateAlternateColorCodes('&', "&7Usunales gildie &e{GUILD_NAME}&7!"))
-                .replaceAll("\\{GUILD_NAME\\}", name);
+                .replaceAll("\\{GUILD_NAME}", name);
     }
 
     public static String getOwnerCanOnlyDeleteGuildMessage() {
@@ -146,26 +146,26 @@ public class ConfigController {
 
     public static String getExitFromGuildMessge(String name) {
         return ConfigController.config.getString("messages.exit_from_guild", ChatColor.translateAlternateColorCodes('&', "&7Wyszedles z gildii &a{GUILD_NAME}&7!"))
-                .replaceAll("\\{GUILD_NAME\\}", name);
+                .replaceAll("\\{GUILD_NAME}", name);
     }
 
     public static String getPlayerDoesntExist(String name) {
         return ConfigController.config.getString("messages.player_doesnt_exist", ChatColor.translateAlternateColorCodes('&', "&eGracz {PLAYER_NAME} nie istnieje!"))
-                .replaceAll("\\{PLAYER_NAME\\}", name);
+                .replaceAll("\\{PLAYER_NAME}", name);
     }
 
     public static String getPlayerIsAlreadyInGuild(String name) {
         return ConfigController.config.getString("messages.player_is_already_in_guild", ChatColor.translateAlternateColorCodes('&', "&eGracz {PLAYER_NAME} jest juz w gildii!"))
-                .replaceAll("\\{PLAYER_NAME\\}", name);
+                .replaceAll("\\{PLAYER_NAME}", name);
     }
 
     public static String getYouGotInviteMessage(String playerName, String guildName, String guildShortName) {
         return ConfigController.config.getString("messages.you_got_invite_message",
                         ChatColor.translateAlternateColorCodes('&', "&aDostales zaproszenie do gildii " +
                                 "&7[&e{GUILD_SHORT_NAME}&7] &e%guild_name% &aod gracza {PLAYER_NAME}. Aby zaakceptowac zaproszenie, wpisz /g akceptuj"))
-                .replaceAll("\\{GUILD_SHORT_NAME\\}", guildShortName)
-                .replaceAll("\\{GUILD_NAME\\}", guildName)
-                .replaceAll("\\{PLAYER_NAME\\}", playerName);
+                .replaceAll("\\{GUILD_SHORT_NAME}", guildShortName)
+                .replaceAll("\\{GUILD_NAME}", guildName)
+                .replaceAll("\\{PLAYER_NAME}", playerName);
     }
 
     public static String getSentInviteMessage() {
@@ -181,13 +181,13 @@ public class ConfigController {
     public static String getYouHaveBeenKickedOutOfGuildMessage(String guildName) {
         return ConfigController.config.getString("messages.you_have_been_kicked_out_of_guild",
                         ChatColor.translateAlternateColorCodes('&', "&eZostales wyrzucony z gildii {GUILD_NAME}!"))
-                .replaceAll("\\{GUILD_NAME\\}", guildName);
+                .replaceAll("\\{GUILD_NAME}", guildName);
     }
 
     public static String getYouKickedOutAUser(String playerName) {
         return ConfigController.config.getString("messages.you_kicked_out_a_user",
                         ChatColor.translateAlternateColorCodes('&', "&aWyrzuciles uzytkownika {PLAYER_NAME}!"))
-                .replaceAll("\\{PLAYER_NAME\\}", playerName);
+                .replaceAll("\\{PLAYER_NAME}", playerName);
     }
 
     public static String getLocationIsNotInCuboid() {
@@ -203,11 +203,16 @@ public class ConfigController {
     public static String getTeleportationIn(Integer seconds) {
         return ConfigController.config.getString("messages.teleportation_in",
                         ChatColor.translateAlternateColorCodes('&', "&6Teleportacja za {SECONDS} sekund..."))
-                .replaceAll("\\{SECONDS\\}", seconds.toString());
+                .replaceAll("\\{SECONDS}", seconds.toString());
     }
 
     public static String getMovedWhileTeleporting() {
         return ConfigController.config.getString("messages.moved_while_teleporting",
                 ChatColor.translateAlternateColorCodes('&', "&eRuszyles sie! Teleportacja anulowana!"));
+    }
+
+    public static String getGuildDoesntExist() {
+        return ConfigController.config.getString("messages.guild_doesnt_exist",
+                ChatColor.translateAlternateColorCodes('&', "&eGildia nie istnieje!"));
     }
 }
