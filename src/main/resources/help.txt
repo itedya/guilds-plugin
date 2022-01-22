@@ -7,4 +7,5 @@
 &b/g wyrzuc <nazwa_uzytkownika> &7- Wyrzuc uzytkownika z gildii
 &b/g ustawdom &7- Ustaw dom gildii w aktualnej lokalizacji
 &b/g dom &7- Teleportuj do domu gildii
+&b/g info <nazwa_gildii> &7- Wyswietl informacje o gildii
 &7------------ &6ItedyaGuilds &7------------
