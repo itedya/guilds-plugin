@@ -9,6 +9,8 @@ import com.itedya.itedyaguilds.exception.IntersectionRegionsException;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.NeededItem;
+import com.itedya.itedyaguilds.validators.GuildNameValidator;
+import com.itedya.itedyaguilds.validators.GuildShortNameValidator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -55,6 +57,19 @@ public class CreateGuild {
 
             if (neededItems.size() != 0) {
                 NeededItemsController.sendNeededItemsErrors(player, neededItems);
+                return true;
+            }
+
+            String validateName = new GuildNameValidator(args[0]).validate();
+            String validateShortName = new GuildShortNameValidator(args[1]).validate();
+
+            if (validateName != null) {
+                player.sendMessage(validateName);
+                return true;
+            }
+
+            if (validateShortName != null) {
+                player.sendMessage(validateShortName);
                 return true;
             }
 
