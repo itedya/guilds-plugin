@@ -5,6 +5,7 @@ import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
+import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.GuildMember;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -39,6 +40,9 @@ public class DeleteGuild {
             Guild guild = GuildsController.getPlayerGuild(player);
             assert guild != null : "Guild is null";
 
+            GuildHome gh = guild.getHome();
+            assert gh != null : "Guild home is null";
+
             GuildMember member = guild.getMembers().stream().filter(item -> item.player.getUniqueId() == player.getUniqueId()).findFirst().orElse(null);
             assert member != null : "Member is null";
 
@@ -47,13 +51,11 @@ public class DeleteGuild {
                 return true;
             }
 
-            try {
-                GuildsController.delete(guild);
-                Database.connection.commit();
-                WorldGuardController.removeGuildRegion(guild);
-            } catch (SQLException e) {
-                Database.connection.rollback();
-            }
+            GuildsController.deleteHome(gh);
+            GuildsController.delete(guild);
+            Database.connection.commit();
+
+            WorldGuardController.removeGuildRegion(guild);
 
             player.sendMessage(ConfigController.getDeletedGuildMessage(guild.name));
 
@@ -62,6 +64,11 @@ public class DeleteGuild {
 
             return true;
         } catch (Exception e) {
+            try {
+                Database.connection.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             player.sendMessage(ConfigController.getServerErrorMessage());
             e.printStackTrace();
             return true;

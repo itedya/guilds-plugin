@@ -33,7 +33,7 @@ public class GuildHomeBuilder {
     }
 
     public GuildHomeBuilder setZ(Integer z) {
-        this.z = x;
+        this.z = z;
         return this;
     }
 

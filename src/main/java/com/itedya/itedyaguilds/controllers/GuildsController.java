@@ -129,6 +129,13 @@ public class GuildsController {
         stmt.close();
     }
 
+    public static void deleteHome(GuildHome home) throws SQLException {
+        PreparedStatement stmt = Database.connection.prepareStatement("DELETE FROM guild_homes WHERE uuid = ?;");
+        stmt.setString(1, home.uuid.toString());
+        stmt.executeUpdate();
+        stmt.close();
+    }
+
     public static void delete(Guild guild) throws SQLException {
         PreparedStatement stmt = Database.connection.prepareStatement("DELETE FROM guilds WHERE uuid = ?;");
         stmt.setString(1, guild.uuid.toString());
