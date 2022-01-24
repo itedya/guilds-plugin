@@ -1,6 +1,7 @@
 package com.itedya.itedyaguilds;
 
 import com.itedya.itedyaguilds.commands.*;
+import com.itedya.itedyaguilds.commands.admin.AdminDelete;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.InvitesController;
 import com.itedya.itedyaguilds.listeners.DisplayCuboidInfoListener;
@@ -78,6 +79,24 @@ public final class ItedyaGuilds extends JavaPlugin {
             case "ustawdom" -> SetGuildHome.initialize(this).onCommand(player, command, label, args);
             case "dom" -> TeleportToGuildHome.initialize(this).onCommand(player, command, label, args);
             case "info" -> GuildInfo.intialize(this).onCommand(player, command, label, args);
+            case "admin" -> {
+                if (args.length == 0) {
+                    for (String line : ConfigController.help) player.sendMessage(line);
+                    yield true;
+                }
+
+                commandName = args[0];
+                args = Arrays.copyOfRange(args, 1, args.length);
+
+                yield switch (commandName) {
+                    case "usun" -> new AdminDelete(this).onCommand(player, args);
+                    default -> {
+                        for (String line : ConfigController.help) player.sendMessage(line);
+
+                        yield true;
+                    }
+                };
+            }
             default -> {
                 for (String line : ConfigController.help) player.sendMessage(line);
 
