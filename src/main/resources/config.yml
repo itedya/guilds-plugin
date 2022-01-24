@@ -37,6 +37,9 @@ messages:
   you_cant_be_in_battle: "&eNie mozesz uzyc tej komendy podczas walki!"
   teleportation_in: "&6Teleportacja za {SECONDS} sekund..."
   moved_while_teleporting: "&eRuszyles sie! Teleportacja anulowana!"
+  player_has_been_added_to_guild: "&aGracz {PLAYER_NAME} zostal dodany do gildii!"
+  player_has_been_kicked_out_of_guild: "&aGracz {PLAYER_NAME} zostal wyrzucony z gildii!"
+  player_exited_from_guild: "&aGracz {PLAYER_NAME} wyszedl z gildii!"
 
   errors:
     golden_apple: "Potrzebujesz 16 zlotych jablek"

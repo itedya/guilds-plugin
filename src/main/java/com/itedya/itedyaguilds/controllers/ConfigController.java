@@ -123,7 +123,7 @@ public class ConfigController {
     }
 
     public static String getWelcomeToGuildMessage(String name, String shortName) {
-        return ChatColor.translateAlternateColorCodes('&', ConfigController.config.getString("messages.you_dont_have_invite_to_guild", "&aWitamy w gildii &7[&e{GUILD_SHORT_NAME}&7] &e{GUILD_NAME}&a!"))
+        return ChatColor.translateAlternateColorCodes('&', ConfigController.config.getString("messages.welcome_to_guild", "&aWitamy w gildii &7[&e{GUILD_SHORT_NAME}&7] &e{GUILD_NAME}&a!"))
                 .replaceAll("\\{GUILD_NAME}", name)
                 .replaceAll("\\{GUILD_SHORT_NAME}", shortName);
     }
@@ -163,7 +163,7 @@ public class ConfigController {
     public static String getYouGotInviteMessage(String playerName, String guildName, String guildShortName) {
         return ChatColor.translateAlternateColorCodes('&', ConfigController.config.getString("messages.you_got_invite_message",
                         "&aDostales zaproszenie do gildii " +
-                                "&7[&e{GUILD_SHORT_NAME}&7] &e%guild_name% &aod gracza {PLAYER_NAME}. Aby zaakceptowac zaproszenie, wpisz /g akceptuj"))
+                                "&7[&e{GUILD_SHORT_NAME}&7] &e{GUILD_NAME} &aod gracza {PLAYER_NAME}. Aby zaakceptowac zaproszenie, wpisz /g akceptuj"))
                 .replaceAll("\\{GUILD_SHORT_NAME}", guildShortName)
                 .replaceAll("\\{GUILD_NAME}", guildName)
                 .replaceAll("\\{PLAYER_NAME}", playerName);
@@ -215,5 +215,26 @@ public class ConfigController {
     public static String getGuildDoesntExist() {
         return ChatColor.translateAlternateColorCodes('&', ConfigController.config.getString("messages.guild_doesnt_exist",
                 "&eGildia nie istnieje!"));
+    }
+
+    public static String getPlayerHasBeenAddedToGuildMessage(String playerName) {
+        return ChatColor.translateAlternateColorCodes('&',
+                ConfigController.config.getString("messages.player_has_been_added_to_guild",
+                        "&aGracz {PLAYER_NAME} zostal dodany do gildii!"))
+                .replaceAll("\\{PLAYER_NAME}", playerName);
+    }
+
+    public static String getPlayerHasBeenKickedOutOfGuildMessage(String playerName) {
+        return  ChatColor.translateAlternateColorCodes('&',
+                ConfigController.config.getString("messages.player_has_been_kicked_out_of_guild",
+                        "&aGracz {PLAYER_NAME} zostal wyrzucony z gildii!"))
+                .replaceAll("\\{PLAYER_NAME}", playerName);
+    }
+
+    public static String getPlayerExitedFromGuildMessage(String playerName) {
+        return  ChatColor.translateAlternateColorCodes('&',
+                        ConfigController.config.getString("messages.player_exited_from_guild",
+                                "&aGracz {PLAYER_NAME} wyszedl z gildii!"))
+                .replaceAll("\\{PLAYER_NAME}", playerName);
     }
 }

@@ -53,6 +53,11 @@ public class ExitFromGuild {
                     "left guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
 
             player.sendMessage(ConfigController.getExitFromGuildMessge(guild.name));
+
+            var members = guild.getMembers();
+            for (var member : members) {
+                member.player.sendMessage(ConfigController.getPlayerExitedFromGuildMessage(player.getName()));
+            }
         } catch (Exception e) {
             try {
                 Database.connection.rollback();

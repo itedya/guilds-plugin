@@ -72,6 +72,11 @@ public class KickOutOfGuild {
                     "kicked out user " + playerToKick.getName() + " " + playerToKick.getUniqueId().toString() + " " +
                     "from guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
 
+            var members = guild.getMembers();
+            for (var member : members) {
+                member.player.sendMessage(ConfigController.getPlayerHasBeenKickedOutOfGuildMessage(playerToKick.getName()));
+            }
+
             return true;
         } catch (Exception e) {
             try {
