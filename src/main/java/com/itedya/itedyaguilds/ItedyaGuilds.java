@@ -2,6 +2,7 @@ package com.itedya.itedyaguilds;
 
 import com.itedya.itedyaguilds.commands.*;
 import com.itedya.itedyaguilds.commands.admin.AdminDelete;
+import com.itedya.itedyaguilds.commands.admin.AdminKickFromGuild;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.InvitesController;
 import com.itedya.itedyaguilds.listeners.DisplayCuboidInfoListener;
@@ -90,6 +91,7 @@ public final class ItedyaGuilds extends JavaPlugin {
 
                 yield switch (commandName) {
                     case "usun" -> new AdminDelete(this).onCommand(player, args);
+                    case "wyrzuc" -> new AdminKickFromGuild(this).onCommand(player, args);
                     default -> {
                         for (String line : ConfigController.help) player.sendMessage(line);
 
