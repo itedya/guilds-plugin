@@ -3,6 +3,7 @@ package com.itedya.itedyaguilds.commands;
 import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildHome;
@@ -16,36 +17,33 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class SetGuildHome {
-    private Logger logger;
+    private final Logger logger;
 
-    public static SetGuildHome initialize(JavaPlugin plugin) {
-        var command = new SetGuildHome();
-        command.logger = plugin.getLogger();
-        return command;
+    public SetGuildHome(JavaPlugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.set-home")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
             Guild guild = GuildsController.getPlayerGuild(player);
             if (guild == null) {
-                player.sendMessage(ConfigController.getYouAreNotInGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
                 return true;
             }
 
-            if (! GuildsController.isPlayerOwnerOfGuild(player, guild)) {
-                player.sendMessage(ConfigController.getYouHaveToBeOwnerOfGuildMessage());
+            if (!GuildsController.isPlayerOwnerOfGuild(player, guild)) {
+                player.sendMessage(MessagesController.getMessage("you_have_to_be_owner_of_guild"));
                 return true;
             }
-
 
 
             if (!WorldGuardController.isPlayerInGuildRegion(player, guild)) {
-                player.sendMessage(ConfigController.getLocationIsNotInCuboid());
+                player.sendMessage(MessagesController.getMessage("location_is_not_in_cuboid"));
                 return true;
             }
 
@@ -53,18 +51,15 @@ public class SetGuildHome {
             GuildHome gh = GuildsController.updateGuildHome(guild.getHome(), loc);
             Database.connection.commit();
 
-            player.sendMessage(new StringBuilder()
-                    .append(ChatColor.GRAY + "Ustawiono nowy dom gildii na kordynatach ")
-                    .append(ChatColor.YELLOW + "X" + ChatColor.GRAY + ": " + gh.x + " ")
-                    .append(ChatColor.YELLOW + "Y" + ChatColor.GRAY + ": " + gh.y + " ")
-                    .append(ChatColor.YELLOW + "Z" + ChatColor.GRAY + ": " + gh.z)
-                    .toString());
+            player.sendMessage(ChatColor.GRAY + "Ustawiono nowy dom gildii na kordynatach " +
+                            ChatColor.YELLOW + "X" + ChatColor.GRAY + ": " + gh.x + " " +
+                            ChatColor.YELLOW + "Y" + ChatColor.GRAY + ": " + gh.y + " " +
+                            ChatColor.YELLOW + "Z" + ChatColor.GRAY + ": " + gh.z);
 
-            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
                     "set up a home guild at coords " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " +
                     "for guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
 
-            return true;
         } catch (Exception e) {
             try {
                 Database.connection.rollback();
@@ -73,8 +68,8 @@ public class SetGuildHome {
             }
             this.logger.severe(e.getMessage());
             e.printStackTrace();
-            player.sendMessage(ConfigController.getServerErrorMessage());
-            return true;
+            player.sendMessage(MessagesController.getMessage("server_error"));
         }
+        return true;
     }
 }

@@ -1,16 +1,14 @@
 package com.itedya.itedyaguilds.commands;
 
 import com.itedya.itedyaguilds.Database;
-import com.itedya.itedyaguilds.controllers.ConfigController;
-import com.itedya.itedyaguilds.controllers.GuildsController;
-import com.itedya.itedyaguilds.controllers.NeededItemsController;
-import com.itedya.itedyaguilds.controllers.WorldGuardController;
+import com.itedya.itedyaguilds.controllers.*;
 import com.itedya.itedyaguilds.exception.IntersectionRegionsException;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.NeededItem;
 import com.itedya.itedyaguilds.validators.GuildNameValidator;
 import com.itedya.itedyaguilds.validators.GuildShortNameValidator;
+import org.apache.logging.log4j.message.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -25,29 +23,27 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class CreateGuild {
-    private Logger logger = Bukkit.getLogger();
+    private final Logger logger;
 
-    public static CreateGuild initialize(JavaPlugin plugin) {
-        var command = new CreateGuild();
-        command.logger = plugin.getLogger();
-        return command;
+    public CreateGuild(JavaPlugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.create")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
             if (args.length != 2) {
-                player.sendMessage(ConfigController.getInvalidUsageMessage());
-                player.sendMessage(ConfigController.help.toString());
+                player.sendMessage(MessagesController.getMessage("invalid_usage"));
+                for (var line : ConfigController.help) player.sendMessage(line);
                 return true;
             }
 
             if (GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(ConfigController.getYouAreAlreadyInGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_are_already_in_guild"));
                 return true;
             }
 
@@ -82,7 +78,7 @@ public class CreateGuild {
 
                 Database.connection.commit();
 
-                this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+                this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
                         "created guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
             } catch (SQLException e) {
                 try {
@@ -95,9 +91,9 @@ public class CreateGuild {
 
                 if (message.contains("UNIQUE constraint failed")) {
                     if (message.contains("name")) {
-                        player.sendMessage(ConfigController.getGuildNameIsNotUniqueMessage());
+                        player.sendMessage(MessagesController.getMessage("guild_name_is_not_unique"));
                     } else if (message.contains("short_name")) {
-                        player.sendMessage(ConfigController.getGuildShortNameIsNotUniqueMessage());
+                        player.sendMessage(MessagesController.getMessage("guild_short_name_is_not_unique"));
                     } else {
                         throw e;
                     }
@@ -107,7 +103,7 @@ public class CreateGuild {
                     throw e;
                 }
             } catch (IntersectionRegionsException e) {
-                player.sendMessage(ConfigController.getCuboidIntersectionMessage());
+                player.sendMessage(MessagesController.getMessage("cuboid_intersection"));
                 GuildsController.delete(guild);
                 return true;
             }
@@ -120,7 +116,7 @@ public class CreateGuild {
 
             return true;
         } catch (Exception e) {
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
 
             this.logger.severe("[ItedyaGuilds] SQLException! " + e.getMessage());
             e.printStackTrace();

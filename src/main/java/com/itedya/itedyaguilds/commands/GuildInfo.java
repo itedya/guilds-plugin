@@ -2,6 +2,7 @@ package com.itedya.itedyaguilds.commands;
 
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildMember;
 import org.bukkit.ChatColor;
@@ -14,64 +15,61 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class GuildInfo {
-    private Logger logger;
+    private final Logger logger;
 
-    public static GuildInfo intialize(Plugin plugin) {
-        var command = new GuildInfo();
-        command.logger = plugin.getLogger();
-        return command;
+    public GuildInfo(Plugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.info")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
-            Guild guildToCheck = null;
+            Guild guildToCheck;
 
             if (args.length == 0) {
                 guildToCheck = GuildsController.getPlayerGuild(player);
                 if (guildToCheck == null) {
-                    player.sendMessage(ConfigController.getYouAreNotInGuildMessage());
+                    player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
                     return true;
                 }
             } else {
                 guildToCheck = GuildsController.getGuildByShortName(args[0]);
 
                 if (guildToCheck == null) {
-                    player.sendMessage(ConfigController.getGuildDoesntExist());
+                    player.sendMessage(MessagesController.getMessage("guild_does_not_exist"));
                     return true;
                 }
             }
 
             List<GuildMember> members = guildToCheck.getMembers();
 
-            StringBuilder sb = new StringBuilder()
-                    .append("&7---------------- &bGildia &6" + guildToCheck.short_name + " &7----------------\n")
-                    .append("Nazwa: " + guildToCheck.name + "\n")
-                    .append("Krotka nazwa: " + guildToCheck.short_name + "\n")
-                    .append("Czlonkowie\n");
+            String sb = "&7---------------- &bGildia &6" + guildToCheck.short_name + " &7----------------\n" +
+                    "Nazwa: " + guildToCheck.name + "\n" +
+                    "Krotka nazwa: " + guildToCheck.short_name + "\n" +
+                    "Czlonkowie\n";
 
             for (GuildMember member : members) {
-                sb.append("&7 - &2" + member.player.getName() + "&7 - ");
+                sb += "&7 - &2" + member.player.getName() + "&7 - ";
 
                 switch (member.role) {
-                    case "OWNER" -> sb.append("&6WLASCICIEL");
-                    case "MEMBER" -> sb.append("&7CZLONEK");
+                    case "OWNER" -> sb += "&6WLASCICIEL";
+                    case "MEMBER" -> sb += "&7CZLONEK";
                     default -> throw new Exception("Unknown enum value " + member.role);
                 }
 
-                sb.append("\n");
+                sb += "\n";
             }
-            sb.append("&7---------------- &bGildia &6" + guildToCheck.short_name + " &7----------------");
+            sb += "&7---------------- &bGildia &6" + guildToCheck.short_name + " &7----------------";
 
-            for (String line : sb.toString().split("\n")) {
+            for (String line : sb.split("\n")) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
             }
         } catch (Exception e) {
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
             this.logger.severe(e.getMessage());
             e.printStackTrace();
         }

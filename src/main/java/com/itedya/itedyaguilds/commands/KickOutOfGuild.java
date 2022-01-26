@@ -1,16 +1,12 @@
 package com.itedya.itedyaguilds.commands;
 
-import com.earth2me.essentials.OfflinePlayer;
 import com.itedya.itedyaguilds.Database;
-import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -19,18 +15,16 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class KickOutOfGuild {
-    private Logger logger;
+    private final Logger logger;
 
-    public static KickOutOfGuild initialize(JavaPlugin plugin) {
-        var command = new KickOutOfGuild();
-        command.logger = plugin.getLogger();
-        return command;
+    public KickOutOfGuild(JavaPlugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.kick-out")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
@@ -45,13 +39,13 @@ public class KickOutOfGuild {
 
             // Check if user is owner of the guild
             if (!GuildsController.isPlayerOwnerOfGuild(player, guild)) {
-                player.sendMessage(ConfigController.getYouHaveToBeOwnerOfGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_have_to_be_owner_of_a_guild"));
                 return true;
             }
 
             // Check if player is trying to kick himself
             if (player.getName().equalsIgnoreCase(args[0])) {
-                player.sendMessage(ConfigController.getYouCantKickYourselfMessage());
+                player.sendMessage(MessagesController.getMessage("you_cant_kick_yourself"));
                 return true;
             }
 
@@ -63,18 +57,20 @@ public class KickOutOfGuild {
             Database.connection.commit();
 
             if (playerToKick.isOnline()) {
-                playerToKick.sendMessage(ConfigController.getYouHaveBeenKickedOutOfGuildMessage(guild.name));
+                playerToKick.sendMessage(MessagesController.getMessage("you_have_been_kicked_out_of_guild")
+                        .replaceAll("\\{GUILD_NAME}", guild.name));
             }
 
-            player.sendMessage(ConfigController.getYouKickedOutAUser(playerToKick.getName()));
+            player.sendMessage(MessagesController.getMessage("you_kicked_out_a_user").replaceAll("\\{PLAYER_NAME}", playerToKick.getName()));
 
-            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
-                    "kicked out user " + playerToKick.getName() + " " + playerToKick.getUniqueId().toString() + " " +
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
+                    "kicked out user " + playerToKick.getName() + " " + playerToKick.getUniqueId() + " " +
                     "from guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
 
             var members = guild.getMembers();
             for (var member : members) {
-                member.player.sendMessage(ConfigController.getPlayerHasBeenKickedOutOfGuildMessage(playerToKick.getName()));
+                member.player.sendMessage(MessagesController.getMessage("player_has_been_kicked_out_of_guild")
+                        .replaceAll("\\{PLAYER_NAME}", playerToKick.getName()));
             }
 
             return true;
@@ -84,7 +80,7 @@ public class KickOutOfGuild {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
             e.printStackTrace();
             return true;
         }

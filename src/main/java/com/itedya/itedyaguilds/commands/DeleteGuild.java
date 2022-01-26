@@ -3,6 +3,7 @@ package com.itedya.itedyaguilds.commands;
 import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildHome;
@@ -17,23 +18,21 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DeleteGuild {
-    private Logger logger;
+    private final Logger logger;
 
-    public static DeleteGuild initialize(JavaPlugin plugin) {
-        var command = new DeleteGuild();
-        command.logger = plugin.getLogger();
-        return command;
+    public DeleteGuild(JavaPlugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.delete")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
             if (!GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(ConfigController.getYouAreNotInGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
                 return true;
             }
 
@@ -47,7 +46,7 @@ public class DeleteGuild {
             assert member != null : "Member is null";
 
             if (!member.role.equals("OWNER")) {
-                player.sendMessage(ConfigController.getYouHaveToBeOwnerOfGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_have_to_be_owner_of_guild"));
                 return true;
             }
 
@@ -57,9 +56,10 @@ public class DeleteGuild {
 
             WorldGuardController.removeGuildRegion(guild);
 
-            player.sendMessage(ConfigController.getDeletedGuildMessage(guild.name));
+            player.sendMessage(MessagesController.getMessage("deleted_guild")
+                    .replaceAll("\\{GUILD_NAME}", guild.name));
 
-            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
                     "deleted guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
 
             return true;
@@ -69,7 +69,7 @@ public class DeleteGuild {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
             e.printStackTrace();
             return true;
         }

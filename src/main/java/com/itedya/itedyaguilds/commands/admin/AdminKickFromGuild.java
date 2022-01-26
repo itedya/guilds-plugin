@@ -4,6 +4,7 @@ import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.ItedyaGuilds;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.models.Guild;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.logging.Logger;
 
 public class AdminKickFromGuild {
-    private Logger logger;
+    private final Logger logger;
 
     public AdminKickFromGuild(ItedyaGuilds plugin) {
         this.logger = plugin.getLogger();
@@ -20,7 +21,7 @@ public class AdminKickFromGuild {
     public boolean onCommand(@NotNull Player player, String[] args) {
         try {
             if (! player.hasPermission("itedya-guilds.admin.kick-out")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 

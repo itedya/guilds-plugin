@@ -3,6 +3,7 @@ package com.itedya.itedyaguilds.commands;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
 import com.itedya.itedyaguilds.controllers.InvitesController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildMember;
 import org.bukkit.Bukkit;
@@ -16,18 +17,16 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class InvitePlayerToGuild {
-    private Logger logger;
+    private final Logger logger;
 
-    public static InvitePlayerToGuild initialize(JavaPlugin plugin) {
-        var command = new InvitePlayerToGuild();
-        command.logger = plugin.getLogger();
-        return command;
+    public InvitePlayerToGuild(JavaPlugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.invite")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
@@ -37,7 +36,7 @@ public class InvitePlayerToGuild {
 
             Guild guild = GuildsController.getPlayerGuild(player);
             if (guild == null) {
-                player.sendMessage(ConfigController.getYouAreNotInGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
                 return true;
             }
 
@@ -47,18 +46,21 @@ public class InvitePlayerToGuild {
             assert member != null : "Member is null";
 
             if (!member.role.equals("OWNER")) {
-                player.sendMessage(ConfigController.getYouHaveToBeOwnerOfGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_have_to_be_owner_of_a_guild"));
                 return true;
             }
 
             Player playerToInvite = Bukkit.getPlayer(args[0]);
             if (playerToInvite == null) {
-                player.sendMessage(ConfigController.getPlayerDoesntExist(args[0]));
+                player.sendMessage(MessagesController.getMessage("player_does_not_exist")
+                        .replaceAll("\\{PLAYER_NAME}", args[0]));
+
                 return true;
             }
 
             if (GuildsController.getPlayerGuild(playerToInvite) != null) {
-                player.sendMessage(ConfigController.getPlayerIsAlreadyInGuild(playerToInvite.getName()));
+                player.sendMessage(MessagesController.getMessage("player_is_already_in_guild")
+                        .replaceAll("\\{PLAYER_NAME}", playerToInvite.getName()));
                 return true;
             }
 
@@ -68,17 +70,20 @@ public class InvitePlayerToGuild {
             }
 
             InvitesController.addGuildInvite(playerToInvite, guild);
-            playerToInvite.sendMessage(ConfigController.getYouGotInviteMessage(playerToInvite.getName(), guild.name, guild.short_name));
+            playerToInvite.sendMessage(MessagesController.getMessage("you_got_invite")
+                    .replaceAll("\\{PLAYER_NAME}", playerToInvite.getName())
+                    .replaceAll("\\{GUILD_NAME}", guild.name)
+                    .replaceAll("\\{GUILD_SHORT_NAME}", guild.short_name));
 
-            player.sendMessage(ConfigController.getSentInviteMessage());
+            player.sendMessage(MessagesController.getMessage("sent_invite"));
 
-            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
-                    "invited user " + playerToInvite.getName() + " " + playerToInvite.getUniqueId().toString() + " " +
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
+                    "invited user " + playerToInvite.getName() + " " + playerToInvite.getUniqueId() + " " +
                     "to guild " + guild.uuid.toString() + " [" + guild.short_name + "]" + guild.name);
 
             return true;
         } catch (Exception e) {
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
             e.printStackTrace();
             return true;
         }

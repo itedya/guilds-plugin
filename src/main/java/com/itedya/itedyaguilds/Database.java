@@ -29,39 +29,38 @@ public class Database {
         }
     }
 
-    public static void migrateDatabase(JavaPlugin plugin) throws SQLException, IOException {
-        InputStream queryFile = plugin.getResource("internal/tables.sql");
+    public static void migrateDatabase(JavaPlugin plugin) throws SQLException {
+        InputStream queryFile = plugin.getResource("migrations.sql");
         assert queryFile != null;
 
         Statement statement = Database.connection.createStatement();
         statement.executeUpdate(
-                "PRAGMA foreign_keys = ON;\n" +
-                        "\n" +
-                        "CREATE TABLE IF NOT EXISTS guilds\n" +
-                        "(\n" +
-                        "    uuid       VARCHAR PRIMARY KEY,\n" +
-                        "    name       VARCHAR NOT NULL UNIQUE,\n" +
-                        "    short_name VARCHAR NOT NULL UNIQUE,\n" +
-                        "    guild_home VARCHAR NOT NULL UNIQUE,\n" +
-                        "    created_at DATETIME default CURRENT_TIMESTAMP,\n" +
-                        "    FOREIGN KEY (guild_home) REFERENCES guild_homes (uuid) ON DELETE CASCADE\n" +
-                        ");\n" +
-                        "\n" +
-                        "CREATE TABLE IF NOT EXISTS guild_homes (\n" +
-                        "    uuid        VARCHAR PRIMARY KEY,\n" +
-                        "    x           INTEGER NOT NULL,\n" +
-                        "    y           INTEGER NOT NULL,\n" +
-                        "    z           INTEGER NOT NULL,\n" +
-                        "    created_at  DATE NOT NULL\n" +
-                        ");\n" +
-                        "\n" +
-                        "CREATE TABLE IF NOT EXISTS guild_members\n" +
-                        "(\n" +
-                        "    player_uuid VARCHAR NOT NULL UNIQUE,\n" +
-                        "    guild_uuid  VARCHAR NOT NULL,\n" +
-                        "    role        VARCHAR NOT NULL,\n" +
-                        "    created_at  DATETIME default CURRENT_TIMESTAMP,\n" +
-                        "    FOREIGN KEY (guild_uuid) REFERENCES guilds (uuid) ON DELETE CASCADE\n" +
+                "PRAGMA foreign_keys = ON;" +
+                        "CREATE TABLE IF NOT EXISTS guilds" +
+                        "(" +
+                        "    uuid       VARCHAR PRIMARY KEY," +
+                        "    name       VARCHAR NOT NULL UNIQUE," +
+                        "    short_name VARCHAR NOT NULL UNIQUE," +
+                        "    guild_home VARCHAR NOT NULL UNIQUE," +
+                        "    created_at DATETIME default CURRENT_TIMESTAMP," +
+                        "    FOREIGN KEY (guild_home) REFERENCES guild_homes (uuid) ON DELETE CASCADE" +
+                        ");" +
+                        "" +
+                        "CREATE TABLE IF NOT EXISTS guild_homes (" +
+                        "    uuid        VARCHAR PRIMARY KEY," +
+                        "    x           INTEGER NOT NULL," +
+                        "    y           INTEGER NOT NULL," +
+                        "    z           INTEGER NOT NULL," +
+                        "    created_at  DATE NOT NULL" +
+                        ");" +
+                        "" +
+                        "CREATE TABLE IF NOT EXISTS guild_members" +
+                        "(" +
+                        "    player_uuid VARCHAR NOT NULL UNIQUE," +
+                        "    guild_uuid  VARCHAR NOT NULL," +
+                        "    role        VARCHAR NOT NULL," +
+                        "    created_at  DATETIME default CURRENT_TIMESTAMP," +
+                        "    FOREIGN KEY (guild_uuid) REFERENCES guilds (uuid) ON DELETE CASCADE" +
                         ");"
         );
 

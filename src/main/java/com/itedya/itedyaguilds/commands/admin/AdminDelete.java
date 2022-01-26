@@ -4,6 +4,7 @@ import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.ItedyaGuilds;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import javax.xml.crypto.Data;
 import java.util.logging.Logger;
 
 public class AdminDelete {
-    private Logger logger;
+    private final Logger logger;
 
     public AdminDelete(ItedyaGuilds plugin) {
         this.logger = plugin.getLogger();
@@ -22,7 +23,7 @@ public class AdminDelete {
     public boolean onCommand(@NotNull Player player, String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.admin.delete")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
@@ -33,7 +34,7 @@ public class AdminDelete {
 
             Guild guild = GuildsController.getGuildByShortName(args[0]);
             if (guild == null) {
-                player.sendMessage(ConfigController.getGuildDoesntExist());
+                player.sendMessage(MessagesController.getMessage("guild_does_not_exist"));
                 return true;
             }
 
@@ -42,11 +43,12 @@ public class AdminDelete {
             Database.connection.commit();
             WorldGuardController.removeGuildRegion(guild);
 
-            player.sendMessage(ConfigController.getDeletedGuildMessage(guild.name));
+            player.sendMessage(MessagesController.getMessage("deleted_guild")
+                    .replaceAll("\\{GUILD_NAME}", guild.name));
 
             String loggerSb = "User " +
                     player.getName() + " " +
-                    player.getUniqueId().toString() + " " +
+                    player.getUniqueId() + " " +
                     "deleted guild " +
                     "[" + guild.short_name + "] " +
                     guild.name + " " +
@@ -60,7 +62,7 @@ public class AdminDelete {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
             this.logger.severe(e.getMessage());
             e.printStackTrace();
         }

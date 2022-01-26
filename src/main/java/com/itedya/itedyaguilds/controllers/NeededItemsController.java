@@ -24,7 +24,7 @@ public class NeededItemsController {
 
     public static void sendNeededItemsErrors(Player player, List<NeededItem> itemsToGet) {
         player.sendMessage(ChatColor.GRAY + "------------");
-        player.sendMessage(ChatColor.RED + ConfigController.getNotEnoughItemsForGuild());
+        player.sendMessage(ChatColor.RED + MessagesController.getMessage("not_enough_items_for_guild"));
 
         for (NeededItem item : itemsToGet) {
             player.sendMessage(ConfigController.getNeededItemError(item.material.name()));

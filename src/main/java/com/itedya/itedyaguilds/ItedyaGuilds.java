@@ -5,6 +5,7 @@ import com.itedya.itedyaguilds.commands.admin.AdminDelete;
 import com.itedya.itedyaguilds.commands.admin.AdminKickFromGuild;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.InvitesController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.listeners.DisplayCuboidInfoListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -32,6 +33,7 @@ public final class ItedyaGuilds extends JavaPlugin {
 
             InvitesController.initialize(this);
             ConfigController.initialize(this);
+            MessagesController.initialize(this);
 
             // Initializing cuboid boss bar
             Bukkit.getServer().getPluginManager().registerEvents(new DisplayCuboidInfoListener(), this);
@@ -61,7 +63,7 @@ public final class ItedyaGuilds extends JavaPlugin {
         }
 
         if (args.length == 0) {
-            player.sendMessage(ConfigController.getInvalidCommandMessage());
+            player.sendMessage(MessagesController.getMessage("invalid_command"));
             for (String line : ConfigController.help) player.sendMessage(line);
 
             return true;
@@ -71,15 +73,15 @@ public final class ItedyaGuilds extends JavaPlugin {
         args = Arrays.copyOfRange(args, 1, args.length);
 
         return switch (commandName) {
-            case "akceptuj" -> AcceptInviteToGuild.initialize(this).onCommand(player, command, label, args);
-            case "stworz" -> CreateGuild.initialize(this).onCommand(player, command, label, args);
-            case "usun" -> DeleteGuild.initialize(this).onCommand(player, command, label, args);
-            case "wyjdz" -> ExitFromGuild.initialize(this).onCommand(player, command, label, args);
-            case "zapros" -> InvitePlayerToGuild.initialize(this).onCommand(player, command, label, args);
-            case "wyrzuc" -> KickOutOfGuild.initialize(this).onCommand(player, command, label, args);
-            case "ustawdom" -> SetGuildHome.initialize(this).onCommand(player, command, label, args);
-            case "dom" -> TeleportToGuildHome.initialize(this).onCommand(player, command, label, args);
-            case "info" -> GuildInfo.intialize(this).onCommand(player, command, label, args);
+            case "akceptuj" -> new AcceptInviteToGuild(this).onCommand(player, command, label, args);
+            case "stworz" -> new CreateGuild(this).onCommand(player, command, label, args);
+            case "usun" -> new DeleteGuild(this).onCommand(player, command, label, args);
+            case "wyjdz" -> new ExitFromGuild(this).onCommand(player, command, label, args);
+            case "zapros" -> new InvitePlayerToGuild(this).onCommand(player, command, label, args);
+            case "wyrzuc" -> new KickOutOfGuild(this).onCommand(player, command, label, args);
+            case "ustawdom" -> new SetGuildHome(this).onCommand(player, command, label, args);
+            case "dom" -> new TeleportToGuildHome(this).onCommand(player, command, label, args);
+            case "info" -> new GuildInfo(this).onCommand(player, command, label, args);
             case "admin" -> {
                 if (args.length == 0) {
                     for (String line : ConfigController.help) player.sendMessage(line);

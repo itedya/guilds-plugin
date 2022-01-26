@@ -3,6 +3,7 @@ package com.itedya.itedyaguilds.commands;
 import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
+import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import org.bukkit.Bukkit;
@@ -16,18 +17,16 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class ExitFromGuild {
-    private Logger logger = Bukkit.getLogger();
+    private final Logger logger;
 
-    public static ExitFromGuild initialize(JavaPlugin plugin) {
-        var command = new ExitFromGuild();
-        command.logger = plugin.getLogger();
-        return command;
+    public ExitFromGuild(JavaPlugin plugin) {
+        logger = plugin.getLogger();
     }
 
     public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             if (!player.hasPermission("itedya-guilds.exit")) {
-                player.sendMessage(ConfigController.getNotEnoughPermissionsMessage());
+                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
                 return true;
             }
 
@@ -35,13 +34,13 @@ public class ExitFromGuild {
 
             // Check if player is in guild
             if (guild == null) {
-                player.sendMessage(ConfigController.getYouAreNotInGuildMessage());
+                player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
                 return true;
             }
 
             // Check if player is owner of guild
             if (GuildsController.isPlayerOwnerOfGuild(player, guild)) {
-                player.sendMessage(ConfigController.getOwnerCanOnlyDeleteGuildMessage());
+                player.sendMessage(MessagesController.getMessage("owner_can_only_delete_guild"));
                 return true;
             }
 
@@ -49,14 +48,16 @@ public class ExitFromGuild {
             Database.connection.commit();
             WorldGuardController.removePlayerFromGuildCuboid(player, guild);
 
-            this.logger.info("User " + player.getName() + " " + player.getUniqueId().toString() + " " +
+            this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
                     "left guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
 
-            player.sendMessage(ConfigController.getExitFromGuildMessge(guild.name));
+            player.sendMessage(MessagesController.getMessage("exit_from_guild")
+                    .replaceAll("\\{GUILD_NAME}", guild.name));
 
             var members = guild.getMembers();
             for (var member : members) {
-                member.player.sendMessage(ConfigController.getPlayerExitedFromGuildMessage(player.getName()));
+                member.player.sendMessage(MessagesController.getMessage("player_exited_from_guild")
+                        .replaceAll("\\{PLAYER_NAME}", player.getName()));
             }
         } catch (Exception e) {
             try {
@@ -64,7 +65,7 @@ public class ExitFromGuild {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            player.sendMessage(ConfigController.getServerErrorMessage());
+            player.sendMessage(MessagesController.getMessage("server_error"));
             logger.severe("[ItedyaGuilds] Exception! " + e.getMessage());
             e.printStackTrace();
         }
