@@ -17,16 +17,15 @@ repositories {
     }
     maven { url "https://maven.enginehub.org/repo/" }
     maven { url "https://repo.essentialsx.net/snapshots/" }
-    maven {
-        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
-    }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url = 'https://repository.jboss.org/nexus/content/repositories/root_repository/' }
 }
 
 dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly 'io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.6'
-    compileOnly 'net.essentialsx:EssentialsX:2.19.2-SNAPSHOT'
+    compileOnly 'org.hibernate:hibernate-core:5.6.6-SNAPSHOT'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
