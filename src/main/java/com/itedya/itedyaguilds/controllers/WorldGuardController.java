@@ -1,12 +1,11 @@
 package com.itedya.itedyaguilds.controllers;
 
-import com.itedya.itedyaguilds.exception.IntersectionRegionsException;
+import com.itedya.itedyaguilds.exceptions.IntersectionRegionsException;
 import com.itedya.itedyaguilds.models.Guild;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
