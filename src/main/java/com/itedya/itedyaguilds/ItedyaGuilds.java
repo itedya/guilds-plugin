@@ -1,20 +1,12 @@
 package com.itedya.itedyaguilds;
 
-import com.itedya.itedyaguilds.commands.*;
-import com.itedya.itedyaguilds.commands.admin.AdminDelete;
-import com.itedya.itedyaguilds.commands.admin.AdminKickFromGuild;
+import com.itedya.itedyaguilds.commands.CommandHandler;
 import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.InvitesController;
 import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.listeners.DisplayCuboidInfoListener;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 
