@@ -1,34 +1,46 @@
 package com.itedya.itedyaguilds;
 
-import com.google.inject.Inject;
-import com.itedya.itedyaguilds.models.Guild;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.table.TableUtils;
-
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.logging.Level;
 
 public class Database {
-    private ItedyaGuilds plugin;
-    private final String DATABASE_URI = "jdbc:sqlite:" + Paths.get(this.plugin.getDataFolder().toString(), "database.db");
-    private JdbcConnectionSource cs;
+    private final ItedyaGuilds plugin;
+    private final String DATABASE_URI;
+    private Connection connection;
 
-    @Inject
-    public Database(ItedyaGuilds plugin) {
-        this.plugin = plugin;
+    public Database(ItedyaGuilds _plugin) {
+        plugin = _plugin;
+        DATABASE_URI = "jdbc:sqlite:" + Paths.get(this.plugin.getDataFolder().toString(), "database.db");
 
         try {
-            this.cs = new JdbcConnectionSource(DATABASE_URI);
-
-            TableUtils.createTableIfNotExists(cs, Guild.class);
+            this.connection = DriverManager.getConnection(DATABASE_URI);
+            this.migrate();
 
             plugin.getLogger().log(Level.INFO, "Initialized connection with database");
+
         } catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Can't initialize connection with database!", e);
         }
     }
 
-    public JdbcConnectionSource getConnectionSource() {
-        return cs;
+    public void migrate() {
+        try {
+            var is = plugin.getResource("migrations.sql");
+            assert is != null : "migrations.sql input stream is null";
+
+            var migrations = new String(is.readAllBytes());
+            var stmt = this.connection.prepareStatement(migrations);
+
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (Exception e) {
+            plugin.getLogger().log(Level.WARNING, "Can't migrate database!", e);
+        }
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }
