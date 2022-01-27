@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +23,7 @@ public final class ItedyaGuilds extends JavaPlugin {
         Injector injector = module.createInjector();
         injector.injectMembers(this);
 
-        this.getCommand("g").setExecutor(this.cmd);
+        Objects.requireNonNull(this.getCommand("g")).setExecutor(this.cmd);
     }
 
     @Override
