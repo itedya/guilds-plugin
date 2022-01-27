@@ -15,16 +15,8 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
-}
-
-repositories {
-    mavenCentral()
     maven { url "https://maven.enginehub.org/repo/" }
-}
-repositories {
     maven { url "https://repo.essentialsx.net/snapshots/" }
-}
-repositories {
     maven {
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
@@ -32,21 +24,10 @@ repositories {
 
 dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.1'
-}
-
-dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT'
-}
-
-dependencies {
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.6'
-}
-
-dependencies {
     compileOnly 'net.essentialsx:EssentialsX:2.19.2-SNAPSHOT'
-}
 
-dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
