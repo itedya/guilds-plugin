@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class ItedyaGuilds extends JavaPlugin {
@@ -42,6 +43,8 @@ public final class ItedyaGuilds extends JavaPlugin {
                 new PlaceholderAPIExpansion().register();
             }
 
+            Objects.requireNonNull(Bukkit.getPluginCommand("g")).setExecutor(new CommandHandler(this));
+
             this.logger.info("Enabled plugin");
         } catch (Exception e) {
             this.logger.severe(e.getMessage());
@@ -53,59 +56,5 @@ public final class ItedyaGuilds extends JavaPlugin {
     @Override
     public void onDisable() {
         this.logger.info("Disabled plugin");
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("You have to be a player to execute this command!");
-            return true;
-        }
-
-        if (args.length == 0) {
-            player.sendMessage(MessagesController.getMessage("invalid_command"));
-            for (String line : ConfigController.help) player.sendMessage(line);
-
-            return true;
-        }
-
-        String commandName = args[0];
-        args = Arrays.copyOfRange(args, 1, args.length);
-
-        return switch (commandName) {
-            case "akceptuj" -> new AcceptInviteToGuild(this).onCommand(player, command, label, args);
-            case "stworz" -> new CreateGuild(this).onCommand(player, command, label, args);
-            case "usun" -> new DeleteGuild(this).onCommand(player, command, label, args);
-            case "wyjdz" -> new ExitFromGuild(this).onCommand(player, command, label, args);
-            case "zapros" -> new InvitePlayerToGuild(this).onCommand(player, command, label, args);
-            case "wyrzuc" -> new KickOutOfGuild(this).onCommand(player, command, label, args);
-            case "ustawdom" -> new SetGuildHome(this).onCommand(player, command, label, args);
-            case "dom" -> new TeleportToGuildHome(this).onCommand(player, command, label, args);
-            case "info" -> new GuildInfo(this).onCommand(player, command, label, args);
-            case "admin" -> {
-                if (args.length == 0) {
-                    for (String line : ConfigController.help) player.sendMessage(line);
-                    yield true;
-                }
-
-                commandName = args[0];
-                args = Arrays.copyOfRange(args, 1, args.length);
-
-                yield switch (commandName) {
-                    case "usun" -> new AdminDelete(this).onCommand(player, args);
-                    case "wyrzuc" -> new AdminKickFromGuild(this).onCommand(player, args);
-                    default -> {
-                        for (String line : ConfigController.help) player.sendMessage(line);
-
-                        yield true;
-                    }
-                };
-            }
-            default -> {
-                for (String line : ConfigController.help) player.sendMessage(line);
-
-                yield true;
-            }
-        };
     }
 }
