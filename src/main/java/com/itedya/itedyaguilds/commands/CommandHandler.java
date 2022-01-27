@@ -19,7 +19,7 @@ public class CommandHandler implements CommandExecutor {
     private final AcceptInviteToGuild acceptInviteToGuild;
     private final CreateGuild createGuild;
     private final DeleteGuild deleteGuild;
-    private final ExitFromGuild exitFromGuild;
+    private final LeaveGuild exitFromGuild;
     private final InvitePlayerToGuild invitePlayerToGuild;
     private final KickOutOfGuild kickOutOfGuild;
     private final SetGuildHome setGuildHome;
@@ -33,7 +33,7 @@ public class CommandHandler implements CommandExecutor {
         acceptInviteToGuild = new AcceptInviteToGuild(plugin);
         createGuild = new CreateGuild(plugin);
         deleteGuild = new DeleteGuild(plugin);
-        exitFromGuild = new ExitFromGuild(plugin);
+        exitFromGuild = new LeaveGuild(plugin);
         invitePlayerToGuild = new InvitePlayerToGuild(plugin);
         kickOutOfGuild = new KickOutOfGuild(plugin);
         setGuildHome = new SetGuildHome(plugin);
@@ -60,7 +60,7 @@ public class CommandHandler implements CommandExecutor {
                 case "akceptuj" -> acceptInviteToGuild.onCommand(player);
                 case "stworz" -> createGuild.onCommand(player, args);
                 case "usun" -> deleteGuild.onCommand(player);
-                case "wyjdz" -> exitFromGuild.onCommand(player, command, label, args);
+                case "wyjdz" -> exitFromGuild.onCommand(player);
                 case "zapros" -> invitePlayerToGuild.onCommand(player, command, label, args);
                 case "wyrzuc" -> kickOutOfGuild.onCommand(player, command, label, args);
                 case "ustawdom" -> setGuildHome.onCommand(player, command, label, args);
