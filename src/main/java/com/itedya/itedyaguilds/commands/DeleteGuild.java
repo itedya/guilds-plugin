@@ -1,20 +1,18 @@
 package com.itedya.itedyaguilds.commands;
 
 import com.itedya.itedyaguilds.Database;
-import com.itedya.itedyaguilds.controllers.ConfigController;
 import com.itedya.itedyaguilds.controllers.GuildsController;
 import com.itedya.itedyaguilds.controllers.MessagesController;
 import com.itedya.itedyaguilds.controllers.WorldGuardController;
+import com.itedya.itedyaguilds.exceptions.PlayerMustBeInGuildException;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.GuildMember;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
+import com.itedya.itedyaguilds.utils.CommandUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DeleteGuild {
@@ -24,31 +22,18 @@ public class DeleteGuild {
         logger = plugin.getLogger();
     }
 
-    public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull Player player) {
         try {
-            if (!player.hasPermission("itedya-guilds.delete")) {
-                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
-                return true;
-            }
-
-            if (!GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
-                return true;
-            }
-
             Guild guild = GuildsController.getPlayerGuild(player);
-            assert guild != null : "Guild is null";
+            if (guild == null) throw new PlayerMustBeInGuildException();
+
+            CommandUtil.playerMustBeOwnerOfGuild(player, guild);
 
             GuildHome gh = guild.getHome();
             assert gh != null : "Guild home is null";
 
             GuildMember member = guild.getMembers().stream().filter(item -> item.player.getUniqueId() == player.getUniqueId()).findFirst().orElse(null);
             assert member != null : "Member is null";
-
-            if (!member.role.equals("OWNER")) {
-                player.sendMessage(MessagesController.getMessage("you_have_to_be_owner_of_guild"));
-                return true;
-            }
 
             GuildsController.deleteHome(gh);
             GuildsController.delete(guild);
@@ -59,8 +44,12 @@ public class DeleteGuild {
             player.sendMessage(MessagesController.getMessage("deleted_guild")
                     .replaceAll("\\{GUILD_NAME}", guild.name));
 
-            this.logger.info("User " + player.getName() + " " + player.getUniqueId() + " " +
-                    "deleted guild " + guild.uuid.toString() + " [" + guild.short_name + "] " + guild.name);
+            this.logger.info("User ? ? deleted guild ? [?] ?"
+                    .replace("?", player.getUniqueId().toString())
+                    .replace("?", player.getName())
+                    .replace("?", guild.uuid.toString())
+                    .replace("?", guild.short_name)
+                    .replace("?", guild.name));
 
             return true;
         } catch (Exception e) {

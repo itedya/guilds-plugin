@@ -59,7 +59,7 @@ public class CommandHandler implements CommandExecutor {
             return switch (commandName) {
                 case "akceptuj" -> acceptInviteToGuild.onCommand(player);
                 case "stworz" -> createGuild.onCommand(player, args);
-                case "usun" -> deleteGuild.onCommand(player, args);
+                case "usun" -> deleteGuild.onCommand(player);
                 case "wyjdz" -> exitFromGuild.onCommand(player, command, label, args);
                 case "zapros" -> invitePlayerToGuild.onCommand(player, command, label, args);
                 case "wyrzuc" -> kickOutOfGuild.onCommand(player, command, label, args);
