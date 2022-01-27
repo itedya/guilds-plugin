@@ -1,10 +1,7 @@
 package com.itedya.itedyaguilds.utils;
 
 import com.itedya.itedyaguilds.controllers.GuildsController;
-import com.itedya.itedyaguilds.exceptions.NotEnoughPermissionsException;
-import com.itedya.itedyaguilds.exceptions.PlayerIsAlreadyInGuildException;
-import com.itedya.itedyaguilds.exceptions.PlayerMustBeInGuildException;
-import com.itedya.itedyaguilds.exceptions.PlayerMustBeOwnerOfGuildException;
+import com.itedya.itedyaguilds.exceptions.*;
 import com.itedya.itedyaguilds.models.Guild;
 import org.bukkit.entity.Player;
 
@@ -52,6 +49,12 @@ public class CommandUtil {
     public static void playerMustBeOwnerOfGuild(Player player, Guild guild) throws SQLException, ParseException, PlayerMustBeOwnerOfGuildException {
         if (!GuildsController.isPlayerOwnerOfGuild(player, guild)) {
             throw new PlayerMustBeOwnerOfGuildException();
+        }
+    }
+
+    public static void playerCantBeOwnerOfGuild(Player player, Guild guild) throws PlayerCantBeOwnerOfGuildException, SQLException, ParseException {
+        if (GuildsController.isPlayerOwnerOfGuild(player, guild)) {
+            throw new PlayerCantBeOwnerOfGuildException();
         }
     }
 }
