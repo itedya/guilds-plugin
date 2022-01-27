@@ -22,17 +22,6 @@ public class NeededItemsController {
         }).toList();
     }
 
-    public static void sendNeededItemsErrors(Player player, List<NeededItem> itemsToGet) {
-        player.sendMessage(ChatColor.GRAY + "------------");
-        player.sendMessage(ChatColor.RED + MessagesController.getMessage("not_enough_items_for_guild"));
-
-        for (NeededItem item : itemsToGet) {
-            player.sendMessage(ConfigController.getNeededItemError(item.material.name()));
-        }
-
-        player.sendMessage(ChatColor.GRAY + "------------");
-    }
-
     public static void takeGuildNeededItems(Inventory inventory) {
         inventory.removeItemAnySlot(new ItemStack(Material.GOLDEN_APPLE, 16),
                 new ItemStack(Material.ENDER_PEARL, 16),
