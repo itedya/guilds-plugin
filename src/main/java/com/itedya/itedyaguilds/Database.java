@@ -21,6 +21,8 @@ public class Database {
             this.cs = new JdbcConnectionSource(DATABASE_URI);
 
             TableUtils.createTableIfNotExists(cs, Guild.class);
+
+            plugin.getLogger().log(Level.INFO, "Initialized connection with database");
         } catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Can't initialize connection with database!", e);
         }
