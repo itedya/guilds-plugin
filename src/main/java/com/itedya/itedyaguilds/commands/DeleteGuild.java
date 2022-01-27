@@ -8,6 +8,7 @@ import com.itedya.itedyaguilds.controllers.WorldGuardController;
 import com.itedya.itedyaguilds.models.Guild;
 import com.itedya.itedyaguilds.models.GuildHome;
 import com.itedya.itedyaguilds.models.GuildMember;
+import com.itedya.itedyaguilds.utils.CommandUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -24,17 +25,10 @@ public class DeleteGuild {
         logger = plugin.getLogger();
     }
 
-    public boolean onCommand(@NotNull Player player, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull Player player) {
         try {
-            if (!player.hasPermission("itedya-guilds.delete")) {
-                player.sendMessage(MessagesController.getMessage("not_enough_permissions"));
-                return true;
-            }
-
-            if (!GuildsController.isPlayerInGuild(player)) {
-                player.sendMessage(MessagesController.getMessage("you_are_not_in_guild"));
-                return true;
-            }
+            CommandUtil.playerMustHavePermission(player, "itedya-guilds.delete");
+            CommandUtil.playerMustBeInGuild(player);
 
             Guild guild = GuildsController.getPlayerGuild(player);
             assert guild != null : "Guild is null";
