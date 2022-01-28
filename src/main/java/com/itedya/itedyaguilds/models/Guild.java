@@ -18,6 +18,8 @@ public class Guild {
     @Size(min = 2, max = 6, message = "Krotka nazwa gildii musi miec od 2 do 6 znakow")
     private String shortName;
 
+    private Integer guildHomeId;
+
     private Date createdAt = new Date();
 
     public Integer getId() {
@@ -42,6 +44,14 @@ public class Guild {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    public Integer getGuildHomeId() {
+        return guildHomeId;
+    }
+
+    public void setGuildHomeId(Integer guildHomeId) {
+        this.guildHomeId = guildHomeId;
     }
 
     public Date getCreatedAt() {
