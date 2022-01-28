@@ -5,6 +5,7 @@ import com.itedya.itedyaguilds.models.Guild;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +17,19 @@ public class GuildDaoImplementation implements GuildDao {
     }
 
     @Override
-    public int add(Guild guild) throws SQLException {
-        PreparedStatement stmt = database.getConnection().prepareStatement("INSERT INTO guilds VALUES (?, ?, ?, ?, datetime('now', 'localtime'));");
-        stmt.setInt(1, guild.getId());
-        stmt.setString(2, guild.getName());
-        stmt.setString(3, guild.getShortName());
-        stmt.setInt(4, guild.getGuildHomeId());
+    public Guild add(Guild guild) throws SQLException {
+        PreparedStatement stmt = database.getConnection().prepareStatement("INSERT INTO guilds (name, short_name, guild_home_id, created_at) VALUES (?, ?, ?, datetime('now', 'localtime'));", Statement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, guild.getName());
+        stmt.setString(2, guild.getShortName());
+        stmt.setInt(3, guild.getGuildHomeId());
 
-        var res = stmt.executeUpdate();
+        stmt.executeUpdate();
+
+        guild.setId(stmt.getGeneratedKeys().getInt("id"));
+
         stmt.close();
 
-        return res;
+        return guild;
     }
 
     @Override

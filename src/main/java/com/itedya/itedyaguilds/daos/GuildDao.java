@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface GuildDao {
-    public int add(Guild guild) throws SQLException;
+    public Guild add(Guild guild) throws SQLException;
 
     public void delete(int id) throws SQLException;
 
