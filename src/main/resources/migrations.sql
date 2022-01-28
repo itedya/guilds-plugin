@@ -1,28 +1,29 @@
 PRAGMA foreign_keys = ON;
 
-CREATE TABLE IF NOT EXISTS guilds
+CREATE TABLE IF NOT EXISTS guild_homes
 (
-    uuid       VARCHAR PRIMARY KEY,
-    name       VARCHAR NOT NULL UNIQUE,
-    short_name VARCHAR NOT NULL UNIQUE,
-    guild_home VARCHAR NOT NULL UNIQUE,
-    created_at DATETIME default CURRENT_TIMESTAMP,
-    FOREIGN KEY (guild_home) REFERENCES guild_homes (uuid) ON DELETE CASCADE
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    x          INTEGER NOT NULL,
+    y          INTEGER NOT NULL,
+    z          INTEGER NOT NULL,
+    created_at DATE    NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS guild_homes (
-    uuid        VARCHAR PRIMARY KEY,
-    x           INTEGER NOT NULL,
-    y           INTEGER NOT NULL,
-    z           INTEGER NOT NULL,
-    created_at  DATE NOT NULL
+CREATE TABLE IF NOT EXISTS guilds
+(
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    name          VARCHAR NOT NULL UNIQUE,
+    short_name    VARCHAR NOT NULL UNIQUE,
+    guild_home_id VARCHAR NOT NULL UNIQUE,
+    created_at    DATETIME default CURRENT_TIMESTAMP,
+    FOREIGN KEY (guild_home_id) REFERENCES guild_homes (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS guild_members
 (
     player_uuid VARCHAR NOT NULL UNIQUE,
-    guild_uuid  VARCHAR NOT NULL,
+    guild_id    INTEGER NOT NULL,
     role        VARCHAR NOT NULL,
     created_at  DATETIME default CURRENT_TIMESTAMP,
-    FOREIGN KEY (guild_uuid) REFERENCES guilds (uuid) ON DELETE CASCADE
+    FOREIGN KEY (guild_id) REFERENCES guilds (id) ON DELETE CASCADE
 );
