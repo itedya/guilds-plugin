@@ -1,5 +1,6 @@
 package com.itedya.itedyaguilds;
 
+import com.itedya.itedyaguilds.commands.CommandsHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -15,6 +16,8 @@ public final class ItedyaGuilds extends JavaPlugin {
         this.getDataFolder().mkdir();
 
         this.database = new Database(this);
+
+        this.getCommand("g").setExecutor(new CommandsHandler(this, database));
 
         this.logger.info("Enabled plugin");
     }
