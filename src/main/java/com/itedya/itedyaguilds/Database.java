@@ -16,6 +16,7 @@ public class Database {
 
         try {
             this.connection = DriverManager.getConnection(DATABASE_URI);
+            this.connection.setAutoCommit(false);
             this.migrate();
 
             plugin.getLogger().log(Level.INFO, "Initialized connection with database");
@@ -30,10 +31,12 @@ public class Database {
             var is = plugin.getResource("migrations.sql");
             assert is != null : "migrations.sql input stream is null";
 
-            var migrations = new String(is.readAllBytes());
-            var stmt = this.connection.prepareStatement(migrations);
+            var migrations = new String(is.readAllBytes()).replace("\r\n", "");
+            var stmt = this.connection.createStatement();
 
-            stmt.executeUpdate();
+            stmt.executeUpdate(migrations);
+
+            this.connection.commit();
             stmt.close();
         } catch (Exception e) {
             plugin.getLogger().log(Level.WARNING, "Can't migrate database!", e);
