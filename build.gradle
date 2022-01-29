@@ -24,9 +24,8 @@ dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly 'io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.6'
-    compileOnly 'javax.validation:validation-api:2.0.1.Final'
 
-    implementation fileTree(dir: 'libs', includes: ['*.jar'])
+//    implementation fileTree(dir: 'libs', includes: ['*.jar'])
 }
 
 def targetJavaVersion = 17

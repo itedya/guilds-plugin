@@ -1,5 +1,6 @@
 package com.itedya.itedyaguilds.middlewares;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class PlayerHasPermission extends AbstractHandler {
@@ -17,6 +18,6 @@ public class PlayerHasPermission extends AbstractHandler {
             return super.handle();
         }
 
-        return "Brak permisji!";
+        return ChatColor.RED + "Brak permisji!";
     }
 }

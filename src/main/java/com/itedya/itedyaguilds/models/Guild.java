@@ -1,21 +1,12 @@
 package com.itedya.itedyaguilds.models;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class Guild {
-    @NotEmpty(message = "Musisz podac id")
-    @Positive(message = "Id musi byc liczba dodatnia")
     private Integer id;
 
-    @NotEmpty(message = "Musisz podac nazwe gildii")
-    @Size(min = 6, max = 64, message = "Nazwa gildii musi moze miec od 6 do 64 znakow")
     private String name;
 
-    @NotEmpty(message = "Musisz podac krotka nazwe gildii")
-    @Size(min = 2, max = 6, message = "Krotka nazwa gildii musi miec od 2 do 6 znakow")
     private String shortName;
 
     private Integer guildHomeId;
