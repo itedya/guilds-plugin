@@ -1,5 +1,7 @@
 PRAGMA foreign_keys = ON;
 
+CREATE DATABASE IF NOT EXISTS itedya_guilds;
+
 CREATE TABLE IF NOT EXISTS guild_homes
 (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,

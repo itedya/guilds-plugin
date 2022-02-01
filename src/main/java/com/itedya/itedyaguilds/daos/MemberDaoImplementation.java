@@ -32,7 +32,7 @@ public class MemberDaoImplementation implements MemberDao {
     public void delete(String playerUuid) throws SQLException {
         PreparedStatement stmt = database.getConnection().prepareStatement("DELETE FROM guild_members WHERE player_uuid = ?;");
         stmt.setString(1, playerUuid);
-        var res = stmt.executeUpdate();
+        stmt.executeUpdate();
         stmt.close();
     }
 
@@ -44,11 +44,18 @@ public class MemberDaoImplementation implements MemberDao {
         if (rs.next()) {
             var member = new Member();
             member.setPlayerUuid(UUID.fromString(rs.getString("player_uuid")));
-            member.setGuildId(rs.getInt(rs.getInt("guild_id")));
+            member.setGuildId(rs.getInt("guild_id"));
             member.setRole(MemberRole.fromString(rs.getString("role")));
             member.setCreatedAt(rs.getDate("created_at"));
+
+            rs.close();
+            stmt.close();
+
             return member;
         }
+
+        rs.close();
+        stmt.close();
 
         return null;
     }

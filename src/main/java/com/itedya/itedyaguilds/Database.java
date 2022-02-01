@@ -1,6 +1,5 @@
 package com.itedya.itedyaguilds;
 
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.logging.Level;
@@ -12,10 +11,20 @@ public class Database {
 
     public Database(ItedyaGuilds _plugin) {
         plugin = _plugin;
-        DATABASE_URI = "jdbc:sqlite:" + Paths.get(this.plugin.getDataFolder().toString(), "database.db");
+
+        var config = plugin.getConfig();
+
+        DATABASE_URI = "jdbc:mysql:" + config.getString("database.host") + ":3306";
 
         try {
-            this.connection = DriverManager.getConnection(DATABASE_URI);
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+            this.connection = DriverManager.getConnection(DATABASE_URI, config.getString("database.username"), config.getString("database.password"));
+            var stmt = this.connection.createStatement();
+            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + config.getString("database.name") + ";");
+            stmt.close();
+            this.connection.close();
+
+            this.connection = DriverManager.getConnection(DATABASE_URI + "/" + config.getString("database.name"), config.getString("database.username"), config.getString("database.password"));
             this.connection.setAutoCommit(false);
             this.migrate();
 

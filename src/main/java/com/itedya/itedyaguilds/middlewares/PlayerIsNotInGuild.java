@@ -31,7 +31,7 @@ public class PlayerIsNotInGuild extends AbstractHandler {
                 return super.handle();
             }
 
-            return ChatColor.translateAlternateColorCodes('&', "&Jestes juz w gildii!");
+            return ChatColor.translateAlternateColorCodes('&', "&eJestes juz w gildii!");
         } catch (SQLException e) {
             plugin.getLogger().log(Level.SEVERE, "Server error!", e);
             return ChatColor.translateAlternateColorCodes('&', "&cWystapil blad serwera. Sprobuj ponownie lub skontaktuj sie z administratorem.");

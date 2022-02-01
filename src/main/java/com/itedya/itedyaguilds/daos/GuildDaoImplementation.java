@@ -25,7 +25,10 @@ public class GuildDaoImplementation implements GuildDao {
 
         stmt.executeUpdate();
 
-        guild.setId(stmt.getGeneratedKeys().getInt("id"));
+        var rs = stmt.getGeneratedKeys();
+        rs.next();
+
+        guild.setId(rs.getInt(1));
 
         stmt.close();
 
@@ -60,6 +63,7 @@ public class GuildDaoImplementation implements GuildDao {
 
         if (rs.next()) {
             var guild = new Guild();
+
             guild.setId(rs.getInt("id"));
             guild.setName(rs.getString("name"));
             guild.setShortName(rs.getString("short_name"));

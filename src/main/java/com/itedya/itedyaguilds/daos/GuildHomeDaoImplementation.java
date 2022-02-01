@@ -23,7 +23,10 @@ public class GuildHomeDaoImplementation implements GuildHomeDao {
 
         stmt.executeUpdate();
 
-        gh.setId(stmt.getGeneratedKeys().getInt("id"));
+        var rs = stmt.getGeneratedKeys();
+        rs.next();
+
+        gh.setId(rs.getInt(1));
 
         stmt.close();
 

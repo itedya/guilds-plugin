@@ -4,6 +4,8 @@ import com.itedya.itedyaguilds.Database;
 import com.itedya.itedyaguilds.ItedyaGuilds;
 import com.itedya.itedyaguilds.commands.handlers.CommandHandler;
 import com.itedya.itedyaguilds.commands.handlers.CreateGuild;
+import com.itedya.itedyaguilds.commands.handlers.DeleteGuild;
+import com.itedya.itedyaguilds.commands.handlers.InviteToGuild;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +34,8 @@ public class CommandsHandler implements CommandExecutor {
         this.commandHandlers = new ConcurrentHashMap<>();
 
         commandHandlers.put("stworz", new CreateGuild(plugin, database));
+        commandHandlers.put("zapros", new InviteToGuild(plugin, database));
+        commandHandlers.put("usun", new DeleteGuild(plugin, database));
     }
 
     @Override
@@ -41,7 +45,7 @@ public class CommandsHandler implements CommandExecutor {
             return true;
         }
 
-        if (args.length != 1) {
+        if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "Wprowadz poprawnie komende! Zobacz /g help");
             return true;
         }
